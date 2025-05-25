@@ -1,4 +1,5 @@
-# budy-frontend
+# Budy - Your Buddy App for your body
+## budy-frontend
 
 Vite + React + TypeScript によるフロントエンドアプリケーションです。ダイエットアプリ「Budy」のUI部分を構成しています。
 
