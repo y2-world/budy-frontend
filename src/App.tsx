@@ -17,7 +17,7 @@ function App() {
 
   return (
     <div>
-      <h1>Laravelからのメッセージ:</h1>
+      <h1>Budy - Your Buddy App for your body</h1>
       <p>{message}</p>
     </div>
   );
