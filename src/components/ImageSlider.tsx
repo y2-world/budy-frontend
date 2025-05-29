@@ -9,7 +9,7 @@ function ImageSlider() {
     useEffect(() => {
         const timer = setInterval(() => {
             setIndex((prev) => (prev + 1) % images.length);
-        }, 10000); // Change image every 3 seconds
+        }, 5000); // Change image every 3 seconds
         return () => clearInterval(timer); // Cleanup on unmount
     }, []);
 
