@@ -1,24 +1,50 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useState } from "react";
+import ImageSlider from "./components/ImageSlider";
+import Modal from "./components/Modal";
+import LoginForm, { onGuestLogin } from "./components/LoginForm";
+import SignupForm from "./components/SignupForm";
+import "./App.css";
 
 function App() {
-  const [message, setMessage] = useState('Loading...');
-
-  useEffect(() => {
-    axios.get('http://localhost/api/ping')
-      .then(response => {
-        setMessage(response.data.message);
-      })
-      .catch(error => {
-        console.error(error);
-        setMessage('API呼び出しに失敗しました');
-      });
-  }, []);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
 
   return (
-    <div>
-      <h1>Budy - Your Buddy App for your body</h1>
-      <p>{message}</p>
+    <div className="App">
+      <ImageSlider />
+      <div>
+        <div className="overlay">
+          <img src="./images/logo.png" alt="Budy Logo" className="logo" />
+          <div className="buttons">
+            <button onClick={() => setShowLogin(true)} className="login-button">
+              Login
+            </button>
+            <button onClick={() => setShowSignup(true)} className="signup-button">
+              Sign Up
+            </button>
+          </div>
+          {showLogin && (
+            <Modal onClose={() => setShowLogin(false)}>
+              <LoginForm
+                onGuestLogin={() => {
+                  setShowLogin(false);
+                  localStorage.setItem("guestUser", "true");
+                }}
+              />
+            </Modal>
+          )}
+          {showSignup && (
+            <Modal onClose={() => setShowSignup(false)}>
+              <SignupForm
+                onGuestLogin={() => {
+                  setShowSignup(false);
+                  localStorage.setItem("guestUser", "true");
+                }}
+              />
+            </Modal>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
