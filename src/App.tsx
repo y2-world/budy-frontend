@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ImageSlider from "./components/ImageSlider";
 import Modal from "./components/Modal";
-import LoginForm, { onGuestLogin } from "./components/LoginForm";
+import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import "./App.css";
 
