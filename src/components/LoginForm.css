@@ -1,9 +1,7 @@
 .login-form {
   max-width: 400px;
-  padding: 1.5rem 2rem;
-  background-color: #fff;
+  /* padding: 1.5rem 2rem; */
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
 }

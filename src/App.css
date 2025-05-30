@@ -25,10 +25,10 @@
 .logo {
   width: 250px;
   height: auto;
-  position: fixed;
+  /* position: fixed; */
   top: 100px;
   left: 50%;
-  transform: translateX(-50%);
+  /* transform: translateX(-50%); */
   z-index: 900; /* 3000 → 900 に下げる */
   pointer-events: none;
 }
@@ -71,15 +71,17 @@
 }
 
 .modal-content {
-  /* background-color: #fff; */
-  padding: 30px;
+  background-color: #fff;
+  /* padding: 30px; */
   border-radius: 8px;
-  width: 90%;
-  max-width: 400px;
+  width: 90%;         /* 画面幅の90%に */
+  max-width: 400px;   /* 最大400pxまで */
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
   position: relative;
   z-index: 3100;
-  margin: 0; /* 念のため */
+  margin: 0 auto;     /* 中央寄せ */
+  box-sizing: border-box; /* パディング込みの幅指定に */
+  padding: 20px;
 }
 
 /* モーダル内の閉じるボタン */
@@ -107,4 +109,23 @@
 
 .modal-background {
   background: rgba(0, 0, 0, 0.7);
+}
+
+.overlay-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 中央に寄せる */
+  gap: 10px; /* ロゴとボタンの間隔 */
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+}
+
+/* さらにスマホ画面用にメディアクエリで微調整 */
+@media (max-width: 400px) {
+  .modal-content {
+    width: 90%;
+  }
 }
