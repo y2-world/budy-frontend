@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./UserPage.css";
 
 function UserPage() {
-  const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+  const [_loggedInUser, setLoggedInUser] = useState<string | null>(null);
   const [ userName, setUserName ] = useState<string>("ゲスト");
   const navigate = useNavigate();
 
@@ -29,7 +29,6 @@ function UserPage() {
   return (
     <div>
       <h1>{userName} さんのマイページ</h1>
-      <p>ログイン中のメールアドレス: {loggedInUser || "未ログイン"}</p>
       <button onClick={handleLogout}>ログアウト</button>
     </div>
   );
