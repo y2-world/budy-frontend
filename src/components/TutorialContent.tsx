@@ -41,7 +41,7 @@ function TutorialContent({ onClose }: { onClose: () => void }) {
       />
 
       <span onClick={next}>
-        {currentSlide === slides.length - 1 ? <FontAwesomeIcon icon={faXmark} /> :  <FontAwesomeIcon icon={faArrowRight} />}
+        {currentSlide === slides.length - 1 ? <FontAwesomeIcon icon={faXmark} style={{color: "black",}} /> :  <FontAwesomeIcon icon={faArrowRight} style={{color: "black",}}  />}
       </span>
     </div>
   );
