@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import ImageSlider from "./ImageSlider";
 import Modal from "./Modal";
 import LoginForm from "./LoginForm";
@@ -6,15 +6,30 @@ import SignupForm from "./SignupForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import TutorialContent from "./TutorialContent";
-import { useNavigate } from "react-router-dom"; // ←追加
+import { useNavigate } from "react-router-dom"; 
 import "./TopPage.css";
 
-function TopPage() {
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(false);
-  const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
-  const navigate = useNavigate(); // ←追加
+type TopPageProps = {
+  showLogin: boolean;
+  setShowLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  showSignup: boolean;
+  setShowSignup: React.Dispatch<React.SetStateAction<boolean>>;
+  showTutorial: boolean;
+  setShowTutorial: React.Dispatch<React.SetStateAction<boolean>>;
+  loggedInUser: string | null;
+  setLoggedInUser: React.Dispatch<React.SetStateAction<string | null>>;
+};
+
+function TopPage({
+  showLogin,
+  setShowLogin,
+  showSignup,
+  setShowSignup,
+  showTutorial,
+  setShowTutorial,
+  setLoggedInUser,
+}: TopPageProps) {
+  const navigate = useNavigate();
 
   useEffect(() => {
     const hasSeenTutorial = localStorage.getItem("seenTutorial");
