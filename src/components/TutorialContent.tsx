@@ -31,10 +31,6 @@ function TutorialContent({ onClose }: { onClose: () => void }) {
     else onClose();
   };
 
-  const prev = () => {
-    if (currentSlide > 0) setCurrentSlide(currentSlide - 1);
-  };
-
   return (
     <div className="tutorial-slide">
       <h2>{slides[currentSlide].title}</h2>
