@@ -7,6 +7,8 @@
   /* padding: 1.5rem; */
   border-radius: 8px;
   font-family: Arial, sans-serif;
+  color: #000; /* 明るい色に固定したい場合 */
+  background-color: #fff; /* 背景が白であることも明示 */
 }
 
 .login-form h2 {
