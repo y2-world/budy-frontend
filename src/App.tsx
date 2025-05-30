@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ImageSlider from "./components/ImageSlider";
 import Modal from "./components/Modal";
 import LoginForm from "./components/LoginForm";
@@ -12,6 +12,14 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+
+  useEffect(() => {
+    const hasSeenTutorial = localStorage.getItem("seenTutorial");
+    if (!hasSeenTutorial) {
+      setShowTutorial(true); // チュートリアルを表示
+      localStorage.setItem("seenTutorial", "true"); // 今後は表示しない
+    }
+  }, []);
 
   return (
     <div className="App">

@@ -75,7 +75,7 @@
   /* padding: 30px; */
   border-radius: 8px;
   width: 90%;         /* 画面幅の90%に */
-  max-width: 400px;   /* 最大400pxまで */
+  max-width: 500px;   /* 最大400pxまで */
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
   position: relative;
   z-index: 3100;
@@ -127,5 +127,6 @@
 @media (max-width: 400px) {
   .modal-content {
     width: 90%;
+    font-size: 15px; /* フォントサイズを小さく */
   }
 }
