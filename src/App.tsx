@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import TopPage from "./components/TopPage";
 import UserPage from "./components/UserPage";
-import "./App.css";
 import {
   BrowserRouter as Router,
   Route,
@@ -47,7 +46,7 @@ function App() {
             />
           }
         />
-        <Route path="/mypage" element={<UserPage />} />
+        <Route path="/mybudy" element={<UserPage />} />
       </Routes>
     </Router>
   );

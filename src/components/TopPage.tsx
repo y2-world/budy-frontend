@@ -5,7 +5,7 @@ import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
-import TutorialContent from "./TutorialContent";
+import TutorialContent from "./TutorialContent"; 
 import { useNavigate } from "react-router-dom"; 
 import "./TopPage.css";
 
@@ -82,13 +82,13 @@ function TopPage({
                 onGuestLogin={() => {
                   setShowLogin(false);
                   localStorage.setItem("guestUser", "true");
-                  navigate("/mypage");
+                  navigate("/mybudy");
                 }}
                 onLoginSuccess={(email: string) => {
                   setShowLogin(false);
                   localStorage.setItem("loggedInUser", email);
                   setLoggedInUser(email);
-                  navigate("/mypage");
+                  navigate("/mybudy");
                 }}
               />
             </Modal>
@@ -100,7 +100,7 @@ function TopPage({
                   setShowSignup(false);
                   localStorage.setItem("loggedInUser", email);
                   setLoggedInUser(email);
-                  navigate("/mypage");
+                  navigate("/mybudy");
                 }}
               />
             </Modal>

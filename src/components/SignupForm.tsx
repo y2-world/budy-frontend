@@ -1,4 +1,4 @@
-import "./SignupForm.css";
+import "./Form.css";
 import { useState } from "react";
 
 type SignupFormProps = {
@@ -38,7 +38,7 @@ function SignupForm({ onSignupSuccess }: SignupFormProps) {
   };
 
   return (
-    <div className="signup-form">
+    <div className="form">
       <h2>新規登録</h2>
       <form onSubmit={handleSignup}>
         <label>ユーザ名</label>

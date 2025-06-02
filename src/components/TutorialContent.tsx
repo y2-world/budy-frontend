@@ -28,7 +28,7 @@ function TutorialContent({ onClose }: { onClose: () => void }) {
 
   const next = () => {
     if (currentSlide < slides.length - 1) setCurrentSlide(currentSlide + 1);
-    else onClose();
+    else onClose(); 
   };
 
   return (
@@ -47,4 +47,4 @@ function TutorialContent({ onClose }: { onClose: () => void }) {
   );
 }
 
-export default TutorialContent;
+export default TutorialContent; 

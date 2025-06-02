@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./LoginForm.css";
+import "./Form.css";
 
 type LoginFormProps = {
   onGuestLogin: () => void;
@@ -18,14 +18,14 @@ function LoginForm({ onGuestLogin, onLoginSuccess }: LoginFormProps) {
     if (users[email] && users[email].password === password) {
       localStorage.setItem("loggedInUser", email);
       onLoginSuccess(email);
-      navigate("/mypage"); // ログイン成功後にマイページへ遷移
+      navigate("/mybudy"); // ログイン成功後にマイページへ遷移
     } else {
       setError("メールアドレスまたはパスワードが正しくありません。");
     }
   };  
 
   return (
-    <div className="login-form">
+    <div className="form">
       <h2>ログイン</h2>
       <form onSubmit={handleLogin}>
         <label>メールアドレス</label>
