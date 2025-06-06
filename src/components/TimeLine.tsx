@@ -3,10 +3,10 @@ import BottomNav from "./BottomNav";
 
 // Propsの型定義
 type TimeLineProps = {
-  data?: any[]; // ← ? をつけることで省略可能になる
+  // data?: any[]; // ← ? をつけることで省略可能になる
 };
 
-const TimeLine: React.FC<TimeLineProps> = ({ data }) => {
+const TimeLine: React.FC<TimeLineProps> = () => {
   return (
     <div className="user-page">
       <Header />

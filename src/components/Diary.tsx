@@ -3,10 +3,10 @@ import BottomNav from "./BottomNav";
 
 // Propsの型定義
 type DiaryProps = {
-  data?: any[]; // ← ? をつけることで省略可能になる
+  // data?: any[]; // ← ? をつけることで省略可能になる
 };
 
-const Diary: React.FC<DiaryProps> = ({ data }) => {
+const Diary: React.FC<DiaryProps> = () => {
   return (
     <div className="user-page">
       <Header />

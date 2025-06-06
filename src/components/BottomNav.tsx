@@ -4,7 +4,7 @@ import "../styles/BottomNav.css";
 
 type BottomNavProps = {
   currentTab: string;
-  onTabChange: () => void;
+  onTabChange: (tab: string) => void; // ✅ 引数 tab を受け取るようにする
 };
 
 // FontAwesome関連のインポート
@@ -14,11 +14,21 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onTabChange }) => {
   return (
     <nav className="bottom-nav">
-      <button className="nav-button">TIME LINE</button>
+      <button
+        className={`nav-button ${currentTab === "timeline" ? "active" : ""}`}
+        onClick={() => onTabChange("timeline")}
+      >
+        TIME LINE
+      </button>
       <button className="add-button">
         <FontAwesomeIcon icon={faPlus} />
       </button>
-      <button className="nav-button">HOME</button>
+      <button
+        className={`nav-button ${currentTab === "home" ? "active" : ""}`}
+        onClick={() => onTabChange("home")}
+      >
+        HOME
+      </button>
     </nav>
   );
 };

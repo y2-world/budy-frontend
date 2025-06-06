@@ -3,10 +3,10 @@ import BottomNav from "./BottomNav";
 
 // Propsの型定義
 type WeightChartProps = {
-  data?: any[]; // ← ? をつけることで省略可能になる
+  // data?: any[]; // ← ? をつけることで省略可能になる
 };
 
-const WeightChart: React.FC<WeightChartProps> = ({ data }) => {
+const WeightChart: React.FC<WeightChartProps> = () => {
   return (
     <div className="user-page">
       <Header />
