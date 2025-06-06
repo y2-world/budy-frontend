@@ -53,7 +53,6 @@ const SideMenu: React.FC<Props> = ({ isOpen, onClose }) => {
             </Link>
           </li>
           <li>
-            {/* ログアウトはリンクではなくボタンで処理 */}
             <div className="logout-button" onClick={handleLogout}>
               ログアウト
             </div>
