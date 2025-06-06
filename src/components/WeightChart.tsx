@@ -3,7 +3,7 @@ import BottomNav from "./BottomNav";
 
 // Propsの型定義
 type WeightChartProps = {
-  data: { date: string; weight: number }[];
+  data?: any[]; // ← ? をつけることで省略可能になる
 };
 
 const WeightChart: React.FC<WeightChartProps> = ({ data }) => {
@@ -11,7 +11,7 @@ const WeightChart: React.FC<WeightChartProps> = ({ data }) => {
     <div className="user-page">
       <Header />
       <h1>体重管理</h1>
-      <BottomNav />
+      <BottomNav currentTab="weight" onTabChange={() => {}} />
     </div>
   );
 };

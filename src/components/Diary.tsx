@@ -3,7 +3,7 @@ import BottomNav from "./BottomNav";
 
 // Propsの型定義
 type DiaryProps = {
-  data: { date: string; text: string }[];
+  data?: any[]; // ← ? をつけることで省略可能になる
 };
 
 const Diary: React.FC<DiaryProps> = ({ data }) => {
@@ -11,7 +11,7 @@ const Diary: React.FC<DiaryProps> = ({ data }) => {
     <div className="user-page">
       <Header />
       <h1>Budy日記</h1>
-      <BottomNav />
+      <BottomNav currentTab="diary" onTabChange={() => {}} />
     </div>
   );
 };

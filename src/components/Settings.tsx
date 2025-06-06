@@ -3,15 +3,15 @@ import BottomNav from "./BottomNav";
 
 // Propsの型定義
 type SettingsProps = {
-  data: { date: string; text: string }[];
+  data?: any[]; // ← ? をつけることで省略可能になる
 };
 
-const Diary: React.FC<SettingsProps> = () => {
+const Diary: React.FC<SettingsProps> = ({ data }) => {
   return (
     <div className="user-page">
       <Header />
       <h1>設定</h1>
-       <BottomNav />
+       <BottomNav currentTab="settings" onTabChange={() => {}} />
     </div>
   );
 };

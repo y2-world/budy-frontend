@@ -5,7 +5,7 @@ import TopPage from "./components/TopPage";
 import UserPage from "./components/UserPage";
 import Weight from "./components/WeightChart";
 import Settings from "./components/Settings";
-import TimeLine from "./components/timeline";
+import TimeLine from "./components/TimeLine";
 import Diary from "./components/Diary";
 
 function App() {
@@ -37,10 +37,10 @@ function App() {
 
       <Routes>
         <Route path="/mybudy" element={<UserPage />} />
-        <Route path="/weight" element={<Weight data={[]} />} />
-        <Route path="/timeline" element={<TimeLine data={[]} />} />
-        <Route path="/diary" element={<Diary data={[]} />} />
-        <Route path="/settings" element={<Settings data={[]} />} />
+        <Route path="/weight" element={<Weight />} />
+        <Route path="/timeline" element={<TimeLine />} />
+        <Route path="/diary" element={<Diary />} />
+        <Route path="/settings" element={<Settings />} />
         <Route
           path="/"
           element={

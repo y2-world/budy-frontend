@@ -3,7 +3,7 @@ import BottomNav from "./BottomNav";
 
 // Propsの型定義
 type TimeLineProps = {
-  data: { date: string; text: string }[];
+  data?: any[]; // ← ? をつけることで省略可能になる
 };
 
 const TimeLine: React.FC<TimeLineProps> = ({ data }) => {
@@ -11,7 +11,7 @@ const TimeLine: React.FC<TimeLineProps> = ({ data }) => {
     <div className="user-page">
       <Header />
       <h1>TIME LINE</h1>
-      <BottomNav />
+      <BottomNav currentTab="timeline" onTabChange={() => {}} />
     </div>
   );
 };
