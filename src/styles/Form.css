@@ -50,7 +50,7 @@
   box-shadow: 0 0 5px rgba(0,119,204,0.5);
 }
 
-.form button[type="submit"] {
+.form button[type="submit"], button.form-start {
   padding: 12px;
   background-color: #0077cc;
   color: white;
