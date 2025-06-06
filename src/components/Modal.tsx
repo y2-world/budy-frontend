@@ -1,5 +1,5 @@
 import React from "react";
-import "./Modal.css";
+import "../styles/Modal.css";
 
 type ModalProps = {
   onClose: () => void;

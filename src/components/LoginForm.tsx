@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Form.css";
+import "../styles/Form.css";
 
 type LoginFormProps = {
   onGuestLogin: () => void;

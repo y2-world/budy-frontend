@@ -1,19 +1,23 @@
+import BottomNav from "./BottomNav";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import OnboardingModal from "./OnboardingModal"; // OnboardingModalのインポート
-import "./UserPage.css";
-import "./Modal.css";
-import "./Form.css";
+import "../styles/UserPage.css";
+import "../styles/Modal.css";
+import "../styles/Form.css";
 
 function UserPage() {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
-  const [userName, setUserName] = useState<string>("ゲスト");
-  const [userBirthday, setUserBirthday] = useState<string>("");
-  const [userHeight, setUserHeight] = useState<string>("");
-  const [userIdealWeight, setUserIdealWeight] = useState<string>("");
+  // const [userName, setUserName] = useState<string>("ゲスト");
+  const [userTargetWeight, setUserTargetWeight] = useState<string>("");
   const [showOnboarding, setShowOnboarding] = useState(false);
 
-  const navigate = useNavigate();
+  // 日付をコンポーネントのトップレベルで定義
+  const date = new Date();
+  const currentYear = date.getFullYear();
+  const currentMonth = date.getMonth() + 1; // 月は0から始まるため+1
+  const currentDay = date.getDate();
+
+  // const navigate = useNavigate();
 
   useEffect(() => {
     const storedEmail = localStorage.getItem("loggedInUser");
@@ -33,10 +37,8 @@ function UserPage() {
 
       setLoggedInUser(guestEmail);
       localStorage.setItem("loggedInUser", guestEmail);
-      setUserName(guestUser.name || "ゲスト");
-      setUserBirthday(guestUser.birthday || "");
-      setUserHeight(guestUser.height || "");
-      setUserIdealWeight(guestUser.idealWeight || "");
+      // setUserName(guestUser.name || "ゲスト");
+      setUserTargetWeight(guestUser.targetWeight || "");
 
       if (!guestUser.onboarded) {
         setShowOnboarding(true); // オンボーディングモーダルを表示
@@ -47,46 +49,40 @@ function UserPage() {
     if (storedEmail && storedUsers[storedEmail]) {
       const user = storedUsers[storedEmail] || {};
       setLoggedInUser(storedEmail);
-      setUserName(user.name || "ゲスト");
-      setUserBirthday(user.birthday || "");
-      setUserHeight(user.height || "");
-      setUserIdealWeight(user.idealWeight || "");
+      // setUserName(user.name || "ゲスト");
+      setUserTargetWeight(user.targetWeight || "");
 
       if (!user.onboarded) {
         setShowOnboarding(true); // オンボーディングモーダルを表示
       }
     } else {
-      setUserName("ゲスト");
-      setUserBirthday("");
-      setUserHeight("");
-      setUserIdealWeight("");
+      // setUserName("ゲスト");
+      setUserTargetWeight("");
     }
   }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("loggedInUser");
-    setLoggedInUser(null);
-    navigate("/"); // ログアウト後はトップページへリダイレクト
-  };
 
   const refreshUserData = () => {
     const storedEmail = localStorage.getItem("loggedInUser");
     const storedUsers = JSON.parse(localStorage.getItem("users") || "{}");
     if (storedEmail && storedUsers[storedEmail]) {
       const user = storedUsers[storedEmail];
-      setUserName(user.name || "ゲスト");
-      setUserBirthday(user.birthday || "");
-      setUserHeight(user.height || "");
-      setUserIdealWeight(user.idealWeight || "");
+      // setUserName(user.name || "ゲスト");
+      // setUserBirthday(user.birthday || "");
+      // setUserHeight(user.height || "");
+      setUserTargetWeight(user.targetWeight || "");
     }
   };
 
   return (
-    <div className="login-form">
-      <div>ユーザー名: {userName}</div>
-      <div>生年月日: {userBirthday || "未設定"}</div>
-      <div>身長: {userHeight || "未設定"}cm</div>
-      <div>理想体重: {userIdealWeight || "未設定"}kg</div>
+    <div className="user-page">
+      <section className="user-stats">
+        <div>
+          {currentYear}年{currentMonth}月{currentDay}日
+        </div>
+        <div>目標体重 {userTargetWeight}kg</div>
+      </section>
+      <section className="user-graph"></section>
+      <BottomNav currentTab="home" onTabChange={() => {}} />
       {showOnboarding && loggedInUser && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -95,12 +91,11 @@ function UserPage() {
               onClose={() => {
                 setShowOnboarding(false);
                 refreshUserData();
-              }} // ここでデータ更新Ï
+              }} // ここでデータ更新
             />
           </div>
         </div>
       )}
-      <button onClick={handleLogout}>ログアウト</button>
     </div>
   );
 }

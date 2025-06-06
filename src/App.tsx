@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import Header from "./components/Header";
 import TopPage from "./components/TopPage";
 import UserPage from "./components/UserPage";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import Weight from "./components/WeightChart";
+import Settings from "./components/Settings";
+import TimeLine from "./components/timeline";
+import Diary from "./components/Diary";
 
 function App() {
+  const location = useLocation(); // Router の中なので正常
+
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
@@ -16,8 +19,8 @@ function App() {
   useEffect(() => {
     const hasSeenTutorial = localStorage.getItem("seenTutorial");
     if (!hasSeenTutorial) {
-      setShowTutorial(true); // チュートリアルを表示
-      localStorage.setItem("seenTutorial", "true"); // 今後は表示しない
+      setShowTutorial(true);
+      localStorage.setItem("seenTutorial", "true");
     }
   }, []);
 
@@ -29,8 +32,15 @@ function App() {
   }, []);
 
   return (
-    <Router>
+    <>
+      {location.pathname === "/mybudy" && <Header />}
+
       <Routes>
+        <Route path="/mybudy" element={<UserPage />} />
+        <Route path="/weight" element={<Weight data={[]} />} />
+        <Route path="/timeline" element={<TimeLine data={[]} />} />
+        <Route path="/diary" element={<Diary data={[]} />} />
+        <Route path="/settings" element={<Settings data={[]} />} />
         <Route
           path="/"
           element={
@@ -46,9 +56,9 @@ function App() {
             />
           }
         />
-        <Route path="/mybudy" element={<UserPage />} />
       </Routes>
-    </Router>
+    </>
   );
 }
+
 export default App;

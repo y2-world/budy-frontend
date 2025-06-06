@@ -1,0 +1,55 @@
+/* styles/Header.css */
+
+/* 共通スタイル */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: #121212; /* 黒に近いダークグレー */
+  border-bottom: 1px solid #333;
+  color: #fff;
+}
+
+.header-logo {
+  height: 64px;
+  width: auto;
+}
+
+.user-info {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 20px;
+}
+
+/* PC表示 */
+@media (min-width: 768px) {
+  .header {
+    padding: 16px 32px;
+  }
+
+  .header-logo {
+    height: 64px;
+  }
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* スマホ表示 */
+@media (max-width: 767px) {
+  .header {
+    padding: 12px 16px;
+  }
+
+  .header-logo {
+    height: 48px;
+  }
+}

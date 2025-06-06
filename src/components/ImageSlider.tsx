@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './ImageSlider.css';
+import '../styles/ImageSlider.css';
 
 const images = ["/images/climb.jpg", "/images/pool.jpg", "/images/run.jpg", "/images/gym.jpg"];
 

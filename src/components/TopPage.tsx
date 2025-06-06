@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import TutorialContent from "./TutorialContent"; 
 import { useNavigate } from "react-router-dom"; 
-import "./TopPage.css";
+import "../styles/TopPage.css";
 
 type TopPageProps = {
   showLogin: boolean;

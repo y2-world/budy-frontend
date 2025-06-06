@@ -1,4 +1,4 @@
-import "./TutorialContent.css";
+import "../styles/TutorialContent.css";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faXmark } from "@fortawesome/free-solid-svg-icons";

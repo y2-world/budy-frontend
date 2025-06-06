@@ -50,6 +50,10 @@
   background-color: #ffffff;
   color: #333333;
   transition: background-color 0.3s ease;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
 }
 
 .login-button:hover,

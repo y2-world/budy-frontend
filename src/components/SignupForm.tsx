@@ -1,4 +1,4 @@
-import "./Form.css";
+import "../styles/Form.css";
 import { useState } from "react";
 
 type SignupFormProps = {

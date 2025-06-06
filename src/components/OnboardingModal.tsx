@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import "./Modal.css";
-import "./TutorialContent.css";
-import "./Form.css";
+import "../styles/Modal.css";
+import "../styles/TutorialContent.css";
+import "../styles/Form.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -14,7 +14,7 @@ function OnboardingModal({ userEmail, onClose }: OnboardingModalProps) {
   const [step, setStep] = useState(1);
   const [height, setHeight] = useState("");
   const [birthday, setBirthday] = useState("");
-  const [weight, setIdealWeight] = useState("");
+  const [weight, setTargetWeight] = useState("");
   const [name, setName] = useState<string>("");
   const [heightError, setHeightError] = useState("");
   const [weightError, setWeightError] = useState("");
@@ -62,7 +62,7 @@ function OnboardingModal({ userEmail, onClose }: OnboardingModalProps) {
     }
     users[userEmail].height = height;
     users[userEmail].birthday = birthday;
-    users[userEmail].idealWeight = weight;
+    users[userEmail].targetWeight = weight;
     localStorage.setItem("users", JSON.stringify(users));
 
     nextStep();
@@ -124,7 +124,7 @@ function OnboardingModal({ userEmail, onClose }: OnboardingModalProps) {
                 value={weight}
                 onChange={(e) => {
                   const value = e.target.value;
-                  setIdealWeight(value);
+                  setTargetWeight(value);
                   setWeightError(validateWeight(value));
                 }}
                 placeholder="例：50"
