@@ -7,8 +7,6 @@ import { Link } from "react-router-dom";
 
 type UserData = {
   name: string;
-  weight: string | number;
-  bodyFat: string | number;
 };
 
 const Header: React.FC = () => {
@@ -35,8 +33,6 @@ const Header: React.FC = () => {
         const user = usersObj[storedEmail];
         setUserData({
           name: user?.name || "ゲスト",
-          weight: user?.weight ? `${user.weight}kg` : "未計測",
-          bodyFat: user?.bodyFat ? `${user.bodyFat}kg` : "未計測",
         });
       } catch (error) {
         console.error("ユーザー一覧の解析に失敗しました:", error);
@@ -52,7 +48,7 @@ const Header: React.FC = () => {
 
         <div className="user-info">
           {userData
-            ? `${userData.name}さん ${userData.weight} ${userData.bodyFat}`
+            ? `${userData.name}さん`
             : ""}
         </div>
         <button

@@ -16,13 +16,13 @@ const Footer: React.FC<FooterProps> = ({ currentTab, onTabChange }) => {
     <nav className="bottom-nav">
       <div className="nav-side">
         <Link
-          to="/timeline"
+          to="/mybudy"
           className={`nav-button nav-link ${
-            currentTab === "timeline" ? "active" : ""
+            currentTab === "home" ? "active" : ""
           }`}
-          onClick={() => onTabChange("timeline")}
+          onClick={() => onTabChange("home")}
         >
-          TIME LINE
+          HOME
         </Link>
       </div>
 
@@ -32,13 +32,13 @@ const Footer: React.FC<FooterProps> = ({ currentTab, onTabChange }) => {
 
       <div className="nav-side">
         <Link
-          to="/mybudy"
+          to="/timeline"
           className={`nav-button nav-link ${
-            currentTab === "home" ? "active" : ""
+            currentTab === "timeline" ? "active" : ""
           }`}
-          onClick={() => onTabChange("home")}
+          onClick={() => onTabChange("timeline")}
         >
-          HOME
+          TIME LINE
         </Link>
       </div>
     </nav>
