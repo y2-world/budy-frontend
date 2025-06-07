@@ -14,7 +14,7 @@ type Props = {
 };
 
 const RecordCard: React.FC<Props> = ({
-  date,
+  // date,
   weight,
   bodyFat,
   diary,

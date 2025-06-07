@@ -3,6 +3,7 @@ import "../styles/Modal.css";
 
 type Props = {
   onClose: () => void;
+  className?: string; 
   children: React.ReactNode;
   showCloseButton?: boolean;
 };
