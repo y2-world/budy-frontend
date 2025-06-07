@@ -1,0 +1,18 @@
+/* 例: styles/Card.css に追加 */
+.settings-form input {
+  display: block;
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 300px;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

@@ -1,0 +1,78 @@
+.card-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.record-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  transition: transform 0.2s;
+}
+
+.record-card:hover {
+  transform: scale(1.02);
+}
+
+.record-card h3, h4 {
+  margin: 0 0 0px;
+  font-size: 16px;
+  color: #333;
+}
+
+.record-card p,label {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #333;
+  justify-content: left;
+}
+
+.timeline-date {
+  font-size: 10px;
+  color: #333;
+  padding-top: 5px;
+}
+
+.timeline-diary {
+  font-size: 14px;
+  color: #333;
+  padding-top: 5px;
+}
+
+.input-field {
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.save-button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.save-button:hover {
+  background-color: #0056b3;
+}
+
+.post-actions svg {
+  transition: transform 0.2s ease;
+}
+
+.post-actions svg:hover {
+  transform: scale(1.1);
+}

@@ -43,6 +43,11 @@
   cursor: pointer;
 }
 
+.user-page p {
+  display: flex;
+  justify-content: center;
+}
+
 /* スマホ表示 */
 @media (max-width: 767px) {
   .header {

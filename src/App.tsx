@@ -3,7 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import TopPage from "./components/TopPage";
 import UserPage from "./components/UserPage";
-import Weight from "./components/WeightChart";
+import Weight from "./components/Weight";
 import Settings from "./components/Settings";
 import TimeLine from "./components/TimeLine";
 import Diary from "./components/Diary";

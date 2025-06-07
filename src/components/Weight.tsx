@@ -10,99 +10,105 @@ import EditModalContent from "./EditModalContent";
 const currentUserId = localStorage.getItem("loggedInUser") ?? "";
 console.log("currentUserId:", currentUserId);
 
-const Diary: React.FC = () => {
-  // ロード関数の中でフィルターを明示的にする
-  const loadDiaryRecords = () =>
+const Weight: React.FC = () => {
+  const loadWeightRecords = () =>
     loadRecordsFromLocalStorage("records", (data) => {
       return (
         data.userId === currentUserId &&
-        typeof data.diary === "string" &&
-        data.diary.trim() !== ""
+        typeof data.weight === "number" &&
+        typeof data.bodyFat === "number"
       );
     });
 
-  const [records, setRecords] = useState(loadDiaryRecords);
-
-  // トースト表示制御（カスタムフックが無ければ簡単に）
+  const [records, setRecords] = useState(loadWeightRecords);
   const [showToast, setShowToast] = useState(false);
-
   const visibleCount = useInfiniteScroll(records.length);
 
-  // localStorage更新を監視してリアルタイム更新（Footerのイベントと連携）
+  // 身長を1度だけ取得してstateに保持
+  const [height, setHeight] = useState<number | null>(null);
+  useEffect(() => {
+    const storedUsers = JSON.parse(localStorage.getItem("users") || "{}");
+    const currentUser = storedUsers[currentUserId];
+    if (currentUser && currentUser.height) {
+      const parsedHeight = parseFloat(currentUser.height);
+      if (!isNaN(parsedHeight)) {
+        setHeight(parsedHeight / 100); // cm → m に変換
+      }
+    }
+  }, []);
+
   useEffect(() => {
     const onRecordsUpdated = () => {
-      const updated = loadDiaryRecords();
+      const updated = loadWeightRecords();
       setRecords(updated);
     };
     window.addEventListener("recordsUpdated", onRecordsUpdated);
     return () => window.removeEventListener("recordsUpdated", onRecordsUpdated);
   }, []);
 
-  // 編集対象のレコード
   const [editingRecord, setEditingRecord] = useState<{
     timestamp: string;
-    diary: string;
+    weight?: string;
+    bodyFat?: string;
   } | null>(null);
 
-  // 削除処理
   const deleteRecord = (timestamp: string) => {
-    if (!window.confirm("本当にこの日記を削除しますか？")) return;
+    if (!window.confirm("本当にこの記録を削除しますか？")) return;
 
     const storedRaw = localStorage.getItem("records") || "{}";
     const allRecords = JSON.parse(storedRaw);
-
     if (!allRecords[currentUserId]) return;
 
     delete allRecords[currentUserId][timestamp];
     localStorage.setItem("records", JSON.stringify(allRecords));
-
-    // 削除後にstate更新
-    setRecords(loadDiaryRecords());
+    setRecords(loadWeightRecords());
   };
 
-  // 編集開始
   const editRecord = (timestamp: string) => {
     const record = records.find((r) => r.timestamp === timestamp);
     if (record) {
-      setEditingRecord({ timestamp, diary: record.diary ?? "" });
+      setEditingRecord({
+        timestamp,
+        weight: record.weight?.toString() ?? "",
+        bodyFat: record.bodyFat?.toString() ?? "",
+      });
     }
   };
 
-  // 編集内容保存
-  const handleSaveEdit = (updatedData: { diary?: string }) => {
+  const handleSaveEdit = (updated: { weight?: string; bodyFat?: string }) => {
     if (!editingRecord) return;
 
-    const updatedDiary = updatedData.diary ?? "";
-    if (updatedDiary.trim() === "") {
-      alert("日記の内容は空白にできません。");
-      return;
-    }
-
-    // 以降は今まで通り
     const storedRaw = localStorage.getItem("records") || "{}";
     const allRecords = JSON.parse(storedRaw);
-
     if (!allRecords[currentUserId]) return;
 
     const recordToUpdate = allRecords[currentUserId][editingRecord.timestamp];
     if (!recordToUpdate) return;
 
+    const parsedWeight =
+      updated.weight !== undefined && updated.weight !== ""
+        ? Number(updated.weight)
+        : recordToUpdate.weight;
+
+    const parsedBodyFat =
+      updated.bodyFat !== undefined && updated.bodyFat !== ""
+        ? Number(updated.bodyFat)
+        : recordToUpdate.bodyFat;
+
     allRecords[currentUserId][editingRecord.timestamp] = {
       ...recordToUpdate,
-      diary: updatedDiary,
+      weight: parsedWeight,
+      bodyFat: parsedBodyFat,
     };
 
     localStorage.setItem("records", JSON.stringify(allRecords));
-
-    setRecords(loadDiaryRecords());
+    setRecords(loadWeightRecords());
     setEditingRecord(null);
     setShowToast(true);
     setTimeout(() => setShowToast(false), 2000);
   };
 
-  // Footer用タブ切替（必要なら）
   const handleTabChange = (tab: string) => {
-    // 現状空実装。必要ならページ遷移等を追加
     console.log("Tab changed to:", tab);
   };
 
@@ -110,13 +116,13 @@ const Diary: React.FC = () => {
     <div className="user-page">
       <Header />
       <section className="user-title">
-        <div>Budy日記</div>
+        <div>体重管理</div>
       </section>
 
       {showToast && <div className="toast">登録しました！</div>}
 
       {records.length === 0 ? (
-        <p>日記の記録がありません。</p>
+        <p>体重記録がありません。</p>
       ) : (
         <div className="card-container">
           {records.slice(0, visibleCount).map((record) => (
@@ -125,12 +131,13 @@ const Diary: React.FC = () => {
               {...record}
               onEdit={() => editRecord(record.timestamp)}
               onDelete={() => deleteRecord(record.timestamp)}
+              height={height} // ← BMI 計算用に渡す
             />
           ))}
         </div>
       )}
 
-      <Footer currentTab="diary" onTabChange={handleTabChange} />
+      <Footer currentTab="weight" onTabChange={handleTabChange} />
 
       {editingRecord && (
         <Modal onClose={() => setEditingRecord(null)}>
@@ -145,4 +152,4 @@ const Diary: React.FC = () => {
   );
 };
 
-export default Diary;
+export default Weight;

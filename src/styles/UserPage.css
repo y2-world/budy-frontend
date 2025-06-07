@@ -1,4 +1,4 @@
-.user-stats {
+.user-stats, .user-title {
   display: flex;
   justify-content: space-around;
   margin-top: 1rem;
@@ -7,4 +7,9 @@
   font-weight: 600;
   font-style: normal;
   font-size: 1.5rem;
+}
+
+/* styles/Weight.css などに追記 */
+.user-page {
+  padding-bottom: 80px; /* ← ここを追加 */
 }

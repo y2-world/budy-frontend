@@ -1,13 +1,13 @@
 import React from "react";
 import "../styles/Modal.css";
 
-type ModalProps = {
+type Props = {
   onClose: () => void;
   children: React.ReactNode;
-  showCloseButton?: boolean; // 追加（省略時はtrueに設定）
+  showCloseButton?: boolean;
 };
 
-function Modal({ onClose, children, showCloseButton = true }: ModalProps) {
+const Modal: React.FC<Props> = ({ onClose, children, showCloseButton = true }) => {
   return (
     <div className="modal-background" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -20,6 +20,6 @@ function Modal({ onClose, children, showCloseButton = true }: ModalProps) {
       </div>
     </div>
   );
-}
+};
 
 export default Modal;
