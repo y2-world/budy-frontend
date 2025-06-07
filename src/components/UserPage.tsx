@@ -1,4 +1,4 @@
-import BottomNav from "./BottomNav";
+import Footer from "./Footer";
 import { useState, useEffect } from "react";
 import OnboardingModal from "./OnboardingModal"; // OnboardingModalのインポート
 import "../styles/UserPage.css";
@@ -67,8 +67,6 @@ function UserPage() {
     if (storedEmail && storedUsers[storedEmail]) {
       const user = storedUsers[storedEmail];
       // setUserName(user.name || "ゲスト");
-      // setUserBirthday(user.birthday || "");
-      // setUserHeight(user.height || "");
       setUserTargetWeight(user.targetWeight || "");
     }
   };
@@ -82,7 +80,7 @@ function UserPage() {
         <div>目標体重 {userTargetWeight}kg</div>
       </section>
       <section className="user-graph"></section>
-      <BottomNav currentTab="home" onTabChange={() => {}} />
+      <Footer currentTab="home" onTabChange={() => {}} />
       {showOnboarding && loggedInUser && (
         <div className="modal-overlay">
           <div className="modal-content">

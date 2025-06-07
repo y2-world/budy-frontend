@@ -1,5 +1,5 @@
 import Header from "./Header";
-import BottomNav from "./BottomNav";
+import Footer from "./Footer";
 
 // Propsの型定義
 type TimeLineProps = {
@@ -10,8 +10,10 @@ const TimeLine: React.FC<TimeLineProps> = () => {
   return (
     <div className="user-page">
       <Header />
-      <h1>TIME LINE</h1>
-      <BottomNav currentTab="timeline" onTabChange={() => {}} />
+      <section className="user-stats">
+        <div>TIME LINE</div>
+      </section>
+      <Footer currentTab="timeline" onTabChange={() => {}} />
     </div>
   );
 };

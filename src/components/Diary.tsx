@@ -1,5 +1,5 @@
 import Header from "./Header";
-import BottomNav from "./BottomNav";
+import Footer from "./Footer";
 
 // Propsの型定義
 type DiaryProps = {
@@ -10,8 +10,10 @@ const Diary: React.FC<DiaryProps> = () => {
   return (
     <div className="user-page">
       <Header />
-      <h1>Budy日記</h1>
-      <BottomNav currentTab="diary" onTabChange={() => {}} />
+      <section className="user-stats">
+        <div>Budy日記</div>
+      </section>
+      <Footer currentTab="diary" onTabChange={() => {}} />
     </div>
   );
 };

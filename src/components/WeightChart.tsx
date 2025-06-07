@@ -1,5 +1,5 @@
 import Header from "./Header";
-import BottomNav from "./BottomNav";
+import Footer from "./Footer";
 
 // Propsの型定義
 type WeightChartProps = {
@@ -10,8 +10,10 @@ const WeightChart: React.FC<WeightChartProps> = () => {
   return (
     <div className="user-page">
       <Header />
-      <h1>体重管理</h1>
-      <BottomNav currentTab="weight" onTabChange={() => {}} />
+      <section className="user-stats">
+        <div>体重管理</div>
+      </section>
+      <Footer currentTab="weight" onTabChange={() => {}} />
     </div>
   );
 };

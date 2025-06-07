@@ -3,6 +3,7 @@ import SideMenu from "./SideMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import "../styles/Header.css";
+import { Link } from "react-router-dom";
 
 type UserData = {
   name: string;
@@ -45,7 +46,9 @@ const Header: React.FC = () => {
   return (
     <>
       <div className="header">
-        <img src="/images/logo.png" alt="Budy Logo" className="header-logo" />
+        <Link to="/mybudy" className="header-link">
+          <img src="/images/logo.png" alt="Budy Logo" className="header-logo" />
+        </Link>
 
         <div className="user-info">
           {userData

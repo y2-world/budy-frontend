@@ -9,10 +9,19 @@
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   z-index: 100;
   display: flex;
-  justify-content: space-between; /* 両端にボタンを配置 */
+  justify-content: space-around;
   align-items: center;
-  padding: 0 60px;
   box-sizing: border-box;
+  padding: 0; /* 両端パディング不要に */
+}
+
+/* 左右のボタン用ラッパー */
+.nav-side {
+  width: 50%;
+  height: 100%;              /* 高さも指定してボタンをフィットさせる */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* タイムライン・ホームボタン */
@@ -25,22 +34,32 @@
   cursor: pointer;
   padding: 8px 16px;
   white-space: nowrap;
-  transition: color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
   font-family: "Outfit", sans-serif;
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
+  width: 100%;              /* 横幅を全体に広げる */
+  height: 100%;             /* 高さも親要素いっぱいに */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .nav-button:hover {
-  color: gray;
+  color: #fff;
+  background-color: #999;   /* グレー背景 */
 }
 
-/* +ボタンを中央下に浮かせる */
+.nav-link {
+  color: #333;
+}
+
+/* +ボタン */
 .add-button {
   position: absolute;
   left: 50%;
-  bottom: 30px; /* bottom-navの上に浮かせる */
+  bottom: 30px;
   transform: translateX(-50%);
   background-color: #000;
   color: #fff;

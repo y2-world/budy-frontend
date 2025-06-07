@@ -1,5 +1,5 @@
 import Header from "./Header";
-import BottomNav from "./BottomNav";
+import Footer from "./Footer";
 
 // Propsの型定義
 type SettingsProps = {
@@ -10,8 +10,10 @@ const Diary: React.FC<SettingsProps> = () => {
   return (
     <div className="user-page">
       <Header />
-      <h1>設定</h1>
-       <BottomNav currentTab="settings" onTabChange={() => {}} />
+      <section className="user-stats">
+        <div>設定</div>
+      </section>
+       <Footer currentTab="settings" onTabChange={() => {}} />
     </div>
   );
 };
