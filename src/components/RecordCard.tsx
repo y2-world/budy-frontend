@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getLoggedInUserHeight } from "../services/userService";
 
 type Props = {
-  date: string;
   weight?: number;
   bodyFat?: number | null;
   diary?: string;
@@ -14,7 +14,6 @@ type Props = {
 };
 
 const RecordCard: React.FC<Props> = ({
-  // date,
   weight,
   bodyFat,
   diary,
@@ -26,29 +25,20 @@ const RecordCard: React.FC<Props> = ({
 
   useEffect(() => {
     const fetchHeight = () => {
-      const storedEmail = localStorage.getItem("loggedInUser");
-      const storedUsers = JSON.parse(localStorage.getItem("users") || "{}");
-      const user =
-        storedEmail && storedUsers[storedEmail]
-          ? storedUsers[storedEmail]
-          : null;
-      const h = user && user.height ? parseFloat(user.height) / 100 : null;
+      const h = getLoggedInUserHeight();
       setHeight(h);
     };
 
     fetchHeight();
 
-    // storageイベントリスナーを追加（他タブでlocalStorage更新された場合も反映）
     const onStorageChange = (event: StorageEvent) => {
       if (event.key === "users" || event.key === "loggedInUser") {
         fetchHeight();
       }
     };
-    window.addEventListener("storage", onStorageChange);
 
-    return () => {
-      window.removeEventListener("storage", onStorageChange);
-    };
+    window.addEventListener("storage", onStorageChange);
+    return () => window.removeEventListener("storage", onStorageChange);
   }, []);
 
   // heightはuseStateの値を使う

@@ -6,17 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons"; // 空のハート
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons"; // 塗りつぶしのハート
 
-type Post = {
-  date: string;
-  diary?: string;
-  timestamp: string;  // undefinedを外す
-  email: string;
-  likeCount?: number;
-};
-
-type User = {
-  name?: string;
-};
+import {
+  getAllPosts,
+  getLikedPosts,
+  toggleLikeLocal,
+} from "../services/postService";
+import type { Post, User } from "../services/postService";
 
 const TimeLine: React.FC = () => {
   const [timelinePosts, setTimelinePosts] = useState<Post[]>([]);
@@ -24,85 +19,34 @@ const TimeLine: React.FC = () => {
   const [likedPosts, setLikedPosts] = useState<{ [key: string]: boolean }>({});
 
   useEffect(() => {
-    const allRecordsRaw = localStorage.getItem("records");
-    console.log(localStorage.getItem("records"));
-    const usersRaw = localStorage.getItem("users");
-
-    if (!allRecordsRaw || !usersRaw) return;
-
-    const allRecords = JSON.parse(allRecordsRaw);
-    const usersData = JSON.parse(usersRaw);
-    setUsers(usersData); // ← ここを必ず入れる
-
-    const allPosts: Post[] = [];
-
-    for (const [email, postsByUser] of Object.entries(allRecords)) {
-      for (const [timestamp, post] of Object.entries(postsByUser as any)) {
-        if ((post as Post).diary) {
-          allPosts.push({
-            ...(post as Post),
-            timestamp,
-            email,
-            likeCount: (post as any).likeCount || 0, // ここを追加
-          });
-        }
-      }
-    }
-
-    allPosts.sort(
-      (a, b) =>
-        new Date(b.timestamp!).getTime() - new Date(a.timestamp!).getTime()
-    );
-
-    const likedPostsRaw = localStorage.getItem("likedPosts");
-    if (likedPostsRaw) {
-      setLikedPosts(JSON.parse(likedPostsRaw));
-    }
-
-    setTimelinePosts(allPosts);
+    const { posts, users } = getAllPosts();
+    setTimelinePosts(posts);
+    setUsers(users);
+    setLikedPosts(getLikedPosts());
   }, []);
 
   const toggleLike = (post: Post) => {
-    if (!post.timestamp) return;
-    const key = post.email + post.timestamp;
+    const key = post.id;
     const isLiked = likedPosts[key] || false;
 
-    // likedPostsの更新
-    const newLikedPosts = { ...likedPosts, [key]: !isLiked };
-    setLikedPosts(newLikedPosts);
-    localStorage.setItem("likedPosts", JSON.stringify(newLikedPosts));
+    // localStorageに反映
+    toggleLikeLocal(post, !isLiked);
 
-    // timelinePostsの更新
-    setTimelinePosts((posts) => {
-      const newPosts = posts.map((p) => {
-        if (p.email === post.email && p.timestamp === post.timestamp) {
-          return {
+    // 状態更新
+    const newLiked = { ...likedPosts, [key]: !isLiked };
+    setLikedPosts(newLiked);
+
+    const newPosts = timelinePosts.map((p) =>
+      p.id === post.id
+        ? {
             ...p,
-            likeCount: isLiked
-              ? Math.max((p.likeCount || 1) - 1, 0)
-              : (p.likeCount || 0) + 1,
-          };
-        }
-        return p;
-      });
-
-      // localStorageのrecordsも更新
-      const recordsRaw = localStorage.getItem("records");
-      if (recordsRaw && post.timestamp !== undefined) {
-        const records = JSON.parse(recordsRaw);
-
-        if (records[post.email] && records[post.email][post.timestamp]) {
-          records[post.email][post.timestamp].likeCount =
-            newPosts.find(
-              (p) => p.email === post.email && p.timestamp === post.timestamp
-            )?.likeCount || 0;
-
-          localStorage.setItem("records", JSON.stringify(records));
-        }
-      }
-
-      return newPosts;
-    });
+            likeCount: !isLiked
+              ? (p.likeCount || 0) + 1
+              : Math.max((p.likeCount || 1) - 1, 0),
+          }
+        : p
+    );
+    setTimelinePosts(newPosts);
   };
 
   return (
@@ -118,12 +62,11 @@ const TimeLine: React.FC = () => {
         ) : (
           timelinePosts.map((post) => {
             const user = users[post.email];
-            const key = post.email + post.timestamp;
-            const isLiked = likedPosts[key] || false;
+            const isLiked = likedPosts[post.id] || false;
 
             return (
               <div
-                key={key}
+                key={post.id}
                 className="record-card"
                 style={{
                   position: "relative",

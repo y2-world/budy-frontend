@@ -1,38 +1,28 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
-import { loadRecordsFromLocalStorage } from "../utils/recordUtils";
 import RecordCard from "./RecordCard";
 import Modal from "./Modal";
 import EditModalContent from "./EditModalContent";
+import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
+import {
+  getDiaryRecords,
+  deleteDiaryRecord,
+  updateDiaryRecord,
+} from "../services/postService";
 
 const currentUserId = localStorage.getItem("loggedInUser") ?? "";
-console.log("currentUserId:", currentUserId);
 
 const Diary: React.FC = () => {
-  // ロード関数の中でフィルターを明示的にする
-  const loadDiaryRecords = () =>
-    loadRecordsFromLocalStorage("records", (data) => {
-      return (
-        data.userId === currentUserId &&
-        typeof data.diary === "string" &&
-        data.diary.trim() !== ""
-      );
-    });
-
-  const [records, setRecords] = useState(loadDiaryRecords);
-
-  // トースト表示制御（カスタムフックが無ければ簡単に）
+  const [records, setRecords] = useState(() => getDiaryRecords(currentUserId));
   const [showToast, setShowToast] = useState(false);
-
+  const [toastMessage, setToastMessage] = useState("");
   const visibleCount = useInfiniteScroll(records.length);
 
   // localStorage更新を監視してリアルタイム更新（Footerのイベントと連携）
   useEffect(() => {
     const onRecordsUpdated = () => {
-      const updated = loadDiaryRecords();
-      setRecords(updated);
+      setRecords(getDiaryRecords(currentUserId));
     };
     window.addEventListener("recordsUpdated", onRecordsUpdated);
     return () => window.removeEventListener("recordsUpdated", onRecordsUpdated);
@@ -47,17 +37,13 @@ const Diary: React.FC = () => {
   // 削除処理
   const deleteRecord = (timestamp: string) => {
     if (!window.confirm("本当にこの日記を削除しますか？")) return;
-
-    const storedRaw = localStorage.getItem("records") || "{}";
-    const allRecords = JSON.parse(storedRaw);
-
-    if (!allRecords[currentUserId]) return;
-
-    delete allRecords[currentUserId][timestamp];
-    localStorage.setItem("records", JSON.stringify(allRecords));
-
-    // 削除後にstate更新
-    setRecords(loadDiaryRecords());
+    const success = deleteDiaryRecord(currentUserId, timestamp);
+    if (success) {
+      setRecords(getDiaryRecords(currentUserId));
+      setToastMessage("削除しました！");
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 2000);
+    }
   };
 
   // 編集開始
@@ -78,24 +64,13 @@ const Diary: React.FC = () => {
       return;
     }
 
-    // 以降は今まで通り
-    const storedRaw = localStorage.getItem("records") || "{}";
-    const allRecords = JSON.parse(storedRaw);
-
-    if (!allRecords[currentUserId]) return;
-
-    const recordToUpdate = allRecords[currentUserId][editingRecord.timestamp];
-    if (!recordToUpdate) return;
-
-    allRecords[currentUserId][editingRecord.timestamp] = {
-      ...recordToUpdate,
+    updateDiaryRecord(currentUserId, editingRecord.timestamp, {
       diary: updatedDiary,
-    };
+    });
 
-    localStorage.setItem("records", JSON.stringify(allRecords));
-
-    setRecords(loadDiaryRecords());
+    setRecords(getDiaryRecords(currentUserId));
     setEditingRecord(null);
+    setToastMessage("更新しました！");
     setShowToast(true);
     setTimeout(() => setShowToast(false), 2000);
   };
@@ -113,7 +88,7 @@ const Diary: React.FC = () => {
         <div>Budy日記</div>
       </section>
 
-      {showToast && <div className="toast">登録しました！</div>}
+      {showToast && <div className="toast">{toastMessage}</div>}
 
       {records.length === 0 ? (
         <p>日記の記録がありません。</p>

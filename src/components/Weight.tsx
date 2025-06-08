@@ -2,49 +2,38 @@ import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
-import { loadRecordsFromLocalStorage } from "../utils/recordUtils";
 import RecordCard from "./RecordCard";
 import Modal from "./Modal";
 import EditModalContent from "./EditModalContent";
+import { getLoggedInUserHeight } from "../services/userService"; 
+
+import {
+  getWeightRecords,
+  deleteWeightRecord,
+  updateWeightRecord,
+} from "../services/postService";
 
 const currentUserId = localStorage.getItem("loggedInUser") ?? "";
 console.log("currentUserId:", currentUserId);
 
 const Weight: React.FC = () => {
-  const loadWeightRecords = () =>
-    loadRecordsFromLocalStorage("records", (data) => {
-      return (
-        data.userId === currentUserId &&
-        typeof data.weight === "number" &&
-        typeof data.bodyFat === "number"
-      );
-    });
+  const currentUserId = localStorage.getItem("loggedInUser") ?? "";
+  const [records, setRecords] = useState(() => getWeightRecords(currentUserId));
 
-  const [records, setRecords] = useState(loadWeightRecords);
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
   const visibleCount = useInfiniteScroll(records.length);
 
-  // 身長を1度だけ取得してstateに保持
-  const [height, setHeight] = useState<number | null>(null);
-  useEffect(() => {
-    const storedUsers = JSON.parse(localStorage.getItem("users") || "{}");
-    const currentUser = storedUsers[currentUserId];
-    if (currentUser && currentUser.height) {
-      const parsedHeight = parseFloat(currentUser.height);
-      if (!isNaN(parsedHeight)) {
-        setHeight(parsedHeight / 100); // cm → m に変換
-      }
-    }
-  }, []);
+  const height = getLoggedInUserHeight();
 
-  useEffect(() => {
-    const onRecordsUpdated = () => {
-      const updated = loadWeightRecords();
-      setRecords(updated);
-    };
-    window.addEventListener("recordsUpdated", onRecordsUpdated);
-    return () => window.removeEventListener("recordsUpdated", onRecordsUpdated);
-  }, []);
+ useEffect(() => {
+  const onRecordsUpdated = () => {
+    setRecords(getWeightRecords(currentUserId));
+  };
+  window.addEventListener("recordsUpdated", onRecordsUpdated);
+  return () => window.removeEventListener("recordsUpdated", onRecordsUpdated);
+}, []);
 
   const [editingRecord, setEditingRecord] = useState<{
     timestamp: string;
@@ -54,14 +43,13 @@ const Weight: React.FC = () => {
 
   const deleteRecord = (timestamp: string) => {
     if (!window.confirm("本当にこの記録を削除しますか？")) return;
-
-    const storedRaw = localStorage.getItem("records") || "{}";
-    const allRecords = JSON.parse(storedRaw);
-    if (!allRecords[currentUserId]) return;
-
-    delete allRecords[currentUserId][timestamp];
-    localStorage.setItem("records", JSON.stringify(allRecords));
-    setRecords(loadWeightRecords());
+    const success = deleteWeightRecord(currentUserId, timestamp);
+    if (success) {
+      setRecords(getWeightRecords(currentUserId));
+      setToastMessage("削除しました！");
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 2000);
+    }
   };
 
   const editRecord = (timestamp: string) => {
@@ -78,32 +66,17 @@ const Weight: React.FC = () => {
   const handleSaveEdit = (updated: { weight?: string; bodyFat?: string }) => {
     if (!editingRecord) return;
 
-    const storedRaw = localStorage.getItem("records") || "{}";
-    const allRecords = JSON.parse(storedRaw);
-    if (!allRecords[currentUserId]) return;
+    const parsedWeight = updated.weight ? Number(updated.weight) : undefined;
+    const parsedBodyFat = updated.bodyFat ? Number(updated.bodyFat) : undefined;
 
-    const recordToUpdate = allRecords[currentUserId][editingRecord.timestamp];
-    if (!recordToUpdate) return;
-
-    const parsedWeight =
-      updated.weight !== undefined && updated.weight !== ""
-        ? Number(updated.weight)
-        : recordToUpdate.weight;
-
-    const parsedBodyFat =
-      updated.bodyFat !== undefined && updated.bodyFat !== ""
-        ? Number(updated.bodyFat)
-        : recordToUpdate.bodyFat;
-
-    allRecords[currentUserId][editingRecord.timestamp] = {
-      ...recordToUpdate,
+    updateWeightRecord(currentUserId, editingRecord.timestamp, {
       weight: parsedWeight,
       bodyFat: parsedBodyFat,
-    };
+    });
 
-    localStorage.setItem("records", JSON.stringify(allRecords));
-    setRecords(loadWeightRecords());
+    setRecords(getWeightRecords(currentUserId));
     setEditingRecord(null);
+    setToastMessage("更新しました！");
     setShowToast(true);
     setTimeout(() => setShowToast(false), 2000);
   };
@@ -119,7 +92,7 @@ const Weight: React.FC = () => {
         <div>体重管理</div>
       </section>
 
-      {showToast && <div className="toast">登録しました！</div>}
+      {showToast && <div className="toast">{toastMessage}</div>}
 
       {records.length === 0 ? (
         <p>体重記録がありません。</p>
