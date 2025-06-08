@@ -43,8 +43,9 @@ const EditModalContent: React.FC<Props> = ({ record, onSave, onClose }) => {
       bodyFat?: string;
     } = {};
 
-    if (date !== record.timestamp.slice(0, 10)) {
-      updated.date = date; // ← ここで date を送る（timestamp は変更しない）
+    const formatDate = (d: string) => new Date(d).toISOString().slice(0, 10);
+    if (formatDate(date) !== formatDate(record.timestamp)) {
+      updated.date = date;
     }
 
     if (isDiary) {
