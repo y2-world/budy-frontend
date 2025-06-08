@@ -130,7 +130,7 @@ const Diary: React.FC = () => {
         </div>
       )}
 
-      <Footer currentTab="diary" onTabChange={handleTabChange} />
+      <Footer onTabChange={handleTabChange} />
 
       {editingRecord && (
         <Modal onClose={() => setEditingRecord(null)}>

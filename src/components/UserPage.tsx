@@ -80,7 +80,7 @@ function UserPage() {
         <div>目標体重 {userTargetWeight}kg</div>
       </section>
       <section className="user-graph"></section>
-      <Footer currentTab="home" onTabChange={() => {}} />
+      <Footer onTabChange={() => {}} />
       {showOnboarding && loggedInUser && (
         <div className="modal-overlay">
           <div className="modal-content">

@@ -132,7 +132,7 @@ const Settings: React.FC = () => {
         </div>
       </div>
 
-      <Footer currentTab="settings" onTabChange={() => {}} />
+      <Footer onTabChange={() => {}} />
     </div>
   );
 };

@@ -6,11 +6,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 type FooterProps = {
-  currentTab: string;
   onTabChange: (tab: string) => void;
 };
 
-const Footer: React.FC<FooterProps> = ({ currentTab, onTabChange }) => {
+const Footer: React.FC<FooterProps> = ({onTabChange }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"weight" | "diary">("weight");
   const [weight, setWeight] = useState<number | "">("");

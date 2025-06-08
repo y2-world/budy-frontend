@@ -168,7 +168,7 @@ const TimeLine: React.FC = () => {
         )}
       </div>
 
-      <Footer currentTab="timeline" onTabChange={() => {}} />
+      <Footer onTabChange={() => {}} />
     </div>
   );
 };

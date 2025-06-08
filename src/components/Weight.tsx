@@ -137,7 +137,7 @@ const Weight: React.FC = () => {
         </div>
       )}
 
-      <Footer currentTab="weight" onTabChange={handleTabChange} />
+      <Footer onTabChange={handleTabChange} />
 
       {editingRecord && (
         <Modal onClose={() => setEditingRecord(null)}>
