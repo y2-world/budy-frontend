@@ -40,7 +40,7 @@
   font-weight: 600;
   font-style: normal;
   width: 100%;              /* 横幅を全体に広げる */
-  height: 100%;             /* 高さも親要素いっぱいに */
+  height: 80%;             /* 高さも親要素いっぱいに */
   display: flex;
   justify-content: center;
   align-items: center;
