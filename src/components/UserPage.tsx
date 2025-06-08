@@ -100,36 +100,44 @@ function UserPage() {
 
   return (
     <div className="user-page">
-      <section className="user-stats">
-        <div>
-          {currentYear}年{currentMonth}月{currentDay}日
-          <div className="user-page-data">
-            {" "}
-            {currentTime.toLocaleTimeString("ja-JP", {
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-            })}
+      <div className="card-container">
+        <div
+          className="record-card"
+          style={{
+            position: "relative",
+            color: "#333",
+          }}
+        >
+          <div className="user-stats">
+            <div>
+              {currentYear}年{currentMonth}月{currentDay}日
+              <div className="user-page-data">
+                {" "}
+                {currentTime.toLocaleTimeString("ja-JP", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                })}
+              </div>
+            </div>
+            <div>
+              目標体重 {userTargetWeight}kg
+              {currentWeight !== null && userTargetWeight !== "" && (
+                <div className="user-page-data">
+                  (目標体重まで{" "}
+                  {Math.max(
+                    0,
+                    parseFloat(
+                      (currentWeight - parseFloat(userTargetWeight)).toFixed(1)
+                    )
+                  )}
+                  kg)
+                </div>
+              )}
+            </div>
           </div>
         </div>
-        <div>
-          目標体重 {userTargetWeight}kg
-          {currentWeight !== null && userTargetWeight !== "" && (
-            <>
-              <div className="user-page-data">
-                (目標体重まで{" "}
-                {Math.max(
-                  0,
-                  parseFloat(
-                    (currentWeight - parseFloat(userTargetWeight)).toFixed(1)
-                  )
-                )}
-                kg)
-              </div>
-            </>
-          )}
-        </div>
-      </section>
+      </div>
       <section className="user-graph"></section>
       <Footer onTabChange={() => {}} />
       {showOnboarding && loggedInUser && (

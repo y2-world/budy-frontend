@@ -1,4 +1,5 @@
-.user-stats, .user-title {
+.user-stats,
+.user-title {
   display: flex;
   justify-content: space-around;
   margin-top: 1rem;
@@ -20,9 +21,14 @@
 
 .user-page-data {
   font-size: 1rem;
-  margin :0;
+  margin: 0;
   display: flex;
   justify-content: center;
 }
 
-
+/* さらにスマホ画面用にメディアクエリで微調整 */
+@media (max-width: 400px) {
+  .user-stats {
+    font-size: 1.2rem;
+  }
+}
