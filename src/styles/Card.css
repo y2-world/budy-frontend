@@ -17,13 +17,15 @@
   transform: scale(1.02);
 }
 
-.record-card h3, h4 {
+.record-card h3,
+h4 {
   margin: 0 0 0px;
   font-size: 16px;
   color: #333;
 }
 
-.record-card p,label {
+.record-card p,
+label {
   margin: 4px 0;
   font-size: 14px;
   color: #333;
@@ -52,6 +54,13 @@
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+.input-field input[type="date"] {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .save-button {
