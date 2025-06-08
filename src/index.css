@@ -31,3 +31,12 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+/* 常に白背景を強制 */
+input,
+select,
+textarea,
+form {
+  background-color: white !important;
+  color: black !important;
+}

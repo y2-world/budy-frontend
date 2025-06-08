@@ -56,7 +56,7 @@ label {
   border-radius: 4px;
 }
 
-.input-field input[type="date"] {
+.input-field[type="date"] {
   width: 100%;
   min-width: 0;
   max-width: 100%;

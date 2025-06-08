@@ -111,7 +111,7 @@ const Settings: React.FC = () => {
           </label>
           <br />
           <label>
-            理想体重 (kg)
+            目標体重 (kg)
             <input
               type="number"
               value={targetweight}

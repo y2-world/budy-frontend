@@ -123,9 +123,7 @@ const Footer: React.FC<FooterProps> = ({ currentTab, onTabChange }) => {
         <div className="nav-side">
           <Link
             to="/mybudy"
-            className={`nav-button nav-link ${
-              currentTab === "home" ? "active" : ""
-            }`}
+            className="nav-button nav-link"
             onClick={() => onTabChange("home")}
           >
             HOME
@@ -139,9 +137,7 @@ const Footer: React.FC<FooterProps> = ({ currentTab, onTabChange }) => {
         <div className="nav-side">
           <Link
             to="/timeline"
-            className={`nav-button nav-link ${
-              currentTab === "timeline" ? "active" : ""
-            }`}
+            className="nav-button nav-link"
             onClick={() => onTabChange("timeline")}
           >
             TIME LINE
@@ -194,7 +190,7 @@ const Footer: React.FC<FooterProps> = ({ currentTab, onTabChange }) => {
                   />
                 </label>
                 <label>
-                  体脂肪 (%)
+                  体脂肪率 (%)
                   <input
                     type="number"
                     value={bodyFat}

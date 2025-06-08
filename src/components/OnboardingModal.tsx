@@ -34,7 +34,7 @@ function OnboardingModal({ userEmail, onClose }: OnboardingModalProps) {
     if (!/^\d+$/.test(value)) return "数値で入力してください。";
     const num = parseInt(value, 10);
     if (num < 30 || num > 200)
-      return "理想体重は30kg〜200kgの範囲で入力してください。";
+      return "目標体重は30kg〜200kgの範囲で入力してください。";
     return "";
   };
 
@@ -118,7 +118,7 @@ function OnboardingModal({ userEmail, onClose }: OnboardingModalProps) {
                 <div className="error-message">{heightError}</div>
               )}
 
-              <label>理想体重 (kg)</label>
+              <label>目標体重 (kg)</label>
               <input
                 type="text"
                 value={weight}
