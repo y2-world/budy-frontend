@@ -65,7 +65,7 @@ const RecordCard: React.FC<Props> = ({
   return (
     <div
       className="record-card"
-      style={{ position: "relative", paddingRight: "40px" }}
+      style={{ position: "relative" }}
     >
       <h3>{date && date.replace(/-/g, "/")}</h3>
       {weight !== undefined && <p>体重: {weight} kg</p>}

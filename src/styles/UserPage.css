@@ -2,12 +2,15 @@
 .user-title {
   display: flex;
   justify-content: space-around;
-  margin-top: 1rem;
   font-family: "Outfit", sans-serif;
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
   font-size: 1.5rem;
+}
+
+.user-title {
+  margin-top: 1rem;
 }
 
 .user-page {

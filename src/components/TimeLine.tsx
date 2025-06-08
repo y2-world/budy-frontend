@@ -86,24 +86,18 @@ const TimeLine: React.FC = () => {
                       : ""}
                   </div>
                 </div>
-
-                <div
-                  style={{
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                  onClick={() => toggleLike(post)}
-                >
-                  <FontAwesomeIcon
-                    icon={isLiked ? solidHeart : regularHeart}
-                    style={{
-                      color: isLiked ? "red" : "gray",
-                      marginRight: "6px",
-                    }}
-                    title={isLiked ? "いいね済み" : "いいね"}
-                  />
-                  <p>{post.likeCount || 0}</p>
+                <div className="timeline-heart">
+                  <div onClick={() => toggleLike(post)}>
+                    <FontAwesomeIcon
+                      icon={isLiked ? solidHeart : regularHeart}
+                      style={{
+                        color: isLiked ? "red" : "gray",
+                        marginRight: "6px",
+                      }}
+                      title={isLiked ? "いいね済み" : "いいね"}
+                    />
+                    {post.likeCount || 0}
+                  </div>
                 </div>
               </div>
             );
