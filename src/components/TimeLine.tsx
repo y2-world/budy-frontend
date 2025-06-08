@@ -67,13 +67,7 @@ const TimeLine: React.FC = () => {
             return (
               <div
                 key={post.id}
-                className="record-card"
-                style={{
-                  position: "relative",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
+                className="timeline-card"
               >
                 <div>
                   <div className="record-header">
