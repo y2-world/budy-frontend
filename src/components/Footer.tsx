@@ -9,7 +9,7 @@ type FooterProps = {
   onTabChange: (tab: string) => void;
 };
 
-const Footer: React.FC<FooterProps> = ({onTabChange }) => {
+const Footer: React.FC<FooterProps> = ({ onTabChange }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"weight" | "diary">("weight");
   const [weight, setWeight] = useState<number | "">("");
@@ -20,7 +20,9 @@ const Footer: React.FC<FooterProps> = ({onTabChange }) => {
 
   const getTodayString = () => {
     const today = new Date();
-    return today.toISOString().split("T")[0];
+    const offset = today.getTimezoneOffset(); // 分単位
+    const localDate = new Date(today.getTime() - offset * 60000);
+    return localDate.toISOString().split("T")[0]; // これでJST基準になる
   };
 
   const userId = localStorage.getItem("loggedInUser");
@@ -214,7 +216,9 @@ const Footer: React.FC<FooterProps> = ({onTabChange }) => {
             )}
 
             <button
-              className={`submit-button${isSubmitDisabled() ? " disabled" : ""}`}
+              className={`submit-button${
+                isSubmitDisabled() ? " disabled" : ""
+              }`}
               onClick={handleSubmit}
               disabled={isSubmitDisabled()}
             >
