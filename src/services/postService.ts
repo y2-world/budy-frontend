@@ -108,18 +108,20 @@ export const updateWeightRecord = (
   return true;
 };
 
-// 既存の records オブジェクトは { [userId]: { [timestamp]: record } }
+import type { DiaryRecord } from "../types/record";
 
-export const getDiaryRecords = (userId: string) => {
+export const getDiaryRecords = (userId: string): DiaryRecord[] => {
   const raw = localStorage.getItem("records") || "{}";
   const allRecords = JSON.parse(raw);
   const userRecords = allRecords[userId] || {};
-  return Object.values(userRecords).filter(
-    (record: any) => typeof record.diary === "string" && record.diary.trim() !== ""
+
+  // Object.values の型推論に型アサーションを追加
+  return (Object.values(userRecords) as DiaryRecord[]).filter(
+    (record) => typeof record.diary === "string" && record.diary.trim() !== ""
   );
 };
 
-export const deleteDiaryRecord = (userId: string, timestamp: string) => {
+export const deleteDiaryRecord = (userId: string, timestamp: string): boolean => {
   const raw = localStorage.getItem("records") || "{}";
   const allRecords = JSON.parse(raw);
   if (!allRecords[userId] || !allRecords[userId][timestamp]) return false;
@@ -133,7 +135,7 @@ export const updateDiaryRecord = (
   userId: string,
   timestamp: string,
   updates: { diary?: string }
-) => {
+): boolean => {
   const raw = localStorage.getItem("records") || "{}";
   const allRecords = JSON.parse(raw);
   if (!allRecords[userId] || !allRecords[userId][timestamp]) return false;

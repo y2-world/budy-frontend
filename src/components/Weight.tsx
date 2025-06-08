@@ -6,15 +6,11 @@ import RecordCard from "./RecordCard";
 import Modal from "./Modal";
 import EditModalContent from "./EditModalContent";
 import { getLoggedInUserHeight } from "../services/userService"; 
-
 import {
   getWeightRecords,
   deleteWeightRecord,
   updateWeightRecord,
 } from "../services/postService";
-
-const currentUserId = localStorage.getItem("loggedInUser") ?? "";
-console.log("currentUserId:", currentUserId);
 
 const Weight: React.FC = () => {
   const currentUserId = localStorage.getItem("loggedInUser") ?? "";

@@ -13,14 +13,8 @@ import {
 
 const currentUserId = localStorage.getItem("loggedInUser") ?? "";
 
-type DiaryRecord = {
-  timestamp: string;
-  diary?: string;
-  // 他に必要なプロパティがあればここに追加
-};
-
 const Diary: React.FC = () => {
-  const [records, setRecords] = useState<DiaryRecord[]>(() => getDiaryRecords(currentUserId) as DiaryRecord[]);
+  const [records, setRecords] = useState(() => getDiaryRecords(currentUserId));
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const visibleCount = useInfiniteScroll(records.length);
@@ -28,7 +22,7 @@ const Diary: React.FC = () => {
   // localStorage更新を監視してリアルタイム更新（Footerのイベントと連携）
   useEffect(() => {
     const onRecordsUpdated = () => {
-      setRecords(getDiaryRecords(currentUserId) as DiaryRecord[]);
+      setRecords(getDiaryRecords(currentUserId));
     };
     window.addEventListener("recordsUpdated", onRecordsUpdated);
     return () => window.removeEventListener("recordsUpdated", onRecordsUpdated);
@@ -44,16 +38,16 @@ const Diary: React.FC = () => {
   const deleteRecord = (timestamp: string) => {
     if (!window.confirm("本当にこの日記を削除しますか？")) return;
     const success = deleteDiaryRecord(currentUserId, timestamp);
-    if (success) {
-      setRecords(getDiaryRecords(currentUserId) as DiaryRecord[]);
-      setToastMessage("削除しました！");
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 2000);
+    if(success) {
+      setRecords(getDiaryRecords(currentUserId));
+       setToastMessage("削除しました！");
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000);
     }
   };
 
   // 編集開始
-  const editRecord = (timestamp: string) => {
+     const editRecord = (timestamp: string) => {
     const record = records.find((r) => r.timestamp === timestamp);
     if (record) {
       setEditingRecord({ timestamp, diary: record.diary ?? "" });
@@ -70,11 +64,9 @@ const Diary: React.FC = () => {
       return;
     }
 
-    updateDiaryRecord(currentUserId, editingRecord.timestamp, {
-      diary: updatedDiary,
-    });
+    updateDiaryRecord(currentUserId, editingRecord.timestamp, {diary: updatedDiary});
 
-    setRecords(getDiaryRecords(currentUserId) as DiaryRecord[]);
+    setRecords(getDiaryRecords(currentUserId));
     setEditingRecord(null);
     setToastMessage("更新しました！");
     setShowToast(true);
