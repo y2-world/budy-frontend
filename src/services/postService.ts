@@ -108,9 +108,11 @@ export const updateWeightRecord = (
   if (!allRecords[userId] || !allRecords[userId][timestamp]) return false;
 
   const current = allRecords[userId][timestamp];
+
   allRecords[userId][timestamp] = {
     ...current,
     ...updated,
+    date: updated.date ?? current.date ?? timestamp.slice(0, 10), // ← ここがポイント
   };
 
   localStorage.setItem("records", JSON.stringify(allRecords));
@@ -154,10 +156,14 @@ export const updateDiaryRecord = (
   const allRecords = JSON.parse(raw);
   if (!allRecords[userId] || !allRecords[userId][timestamp]) return false;
 
+  const current = allRecords[userId][timestamp];
+
   allRecords[userId][timestamp] = {
-    ...allRecords[userId][timestamp],
+    ...current,
     ...updates,
+    date: updates.date || current.date || timestamp.slice(0, 10), // ← 安全に補完
   };
+
   localStorage.setItem("records", JSON.stringify(allRecords));
   return true;
 };
