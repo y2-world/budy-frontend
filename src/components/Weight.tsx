@@ -76,13 +76,18 @@ const Weight: React.FC = () => {
     }
   };
 
-  const handleSaveEdit = (updated: { weight?: string; bodyFat?: string }) => {
+  const handleSaveEdit = (updated: {
+    date?: string;
+    weight?: string;
+    bodyFat?: string;
+  }) => {
     if (!editingRecord) return;
 
     const parsedWeight = updated.weight ? Number(updated.weight) : undefined;
     const parsedBodyFat = updated.bodyFat ? Number(updated.bodyFat) : undefined;
 
     updateWeightRecord(currentUserId, editingRecord.timestamp, {
+      date: updated.date,
       weight: parsedWeight,
       bodyFat: parsedBodyFat,
     });

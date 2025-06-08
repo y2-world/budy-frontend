@@ -73,8 +73,9 @@ const Diary: React.FC = () => {
   };
 
   // 編集内容保存
-  const handleSaveEdit = (updatedData: { diary?: string }) => {
+  const handleSaveEdit = (updatedData: { diary?: string; date?: string }) => {
     if (!editingRecord) return;
+
     const updatedDiary = (updatedData.diary ?? "").trim();
     if (!updatedDiary) {
       alert("日記の内容は空白にできません。");
@@ -83,8 +84,9 @@ const Diary: React.FC = () => {
 
     updateDiaryRecord(currentUserId, editingRecord.timestamp, {
       diary: updatedDiary,
+      date: updatedData.date, // ← ここを追加
     });
-    
+
     refreshRecordsAndShowToast("更新しました！");
     setEditingRecord(null);
   };

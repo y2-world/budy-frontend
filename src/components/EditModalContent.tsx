@@ -9,6 +9,7 @@ type Props = {
     bodyFat?: string;
   };
   onSave: (updatedData: {
+    timestamp?: string;
     diary?: string;
     weight?: string;
     bodyFat?: string;
@@ -20,36 +21,58 @@ const EditModalContent: React.FC<Props> = ({ record, onSave, onClose }) => {
   const [diaryText, setDiaryText] = useState(record.diary || "");
   const [weight, setWeight] = useState(record.weight || "");
   const [bodyFat, setBodyFat] = useState(record.bodyFat || "");
+  const [date, setDate] = useState(() => record.timestamp.slice(0, 10));
+
+  // ここで定義を移動
+  const isDiary = "diary" in record;
+  const isWeight = !!record.weight || !!record.bodyFat;
 
   useEffect(() => {
     setDiaryText(record.diary || "");
     setWeight(record.weight || "");
     setBodyFat(record.bodyFat || "");
+    setDate(record.timestamp.slice(0, 10));
   }, [record]);
 
-const handleSave = () => {
-  const updated: { diary?: string; weight?: string; bodyFat?: string } = {};
+  const handleSave = () => {
+    const updated: {
+      date?: string;
+      diary?: string;
+      weight?: string;
+      bodyFat?: string;
+    } = {};
 
-  if (isDiary) {
-    updated.diary = diaryText;
-  }
-  if (isWeight) {
-    updated.weight = weight;
-    updated.bodyFat = bodyFat;
-  }
+    if (date !== record.timestamp.slice(0, 10)) {
+      updated.date = date; // ← ここで date を送る（timestamp は変更しない）
+    }
 
-  onSave(updated); // ← 変更された部分だけ渡す
-  onClose();
-};
+    if (isDiary) {
+      updated.diary = diaryText;
+    }
+    if (isWeight) {
+      updated.weight = weight;
+      updated.bodyFat = bodyFat;
+    }
 
-  const isDiary = "diary" in record;
-  const isWeight = "weight" in record || "bodyFat" in record;
+    onSave(updated);
+    onClose();
+  };
 
   return (
     <div className="record-content">
+      {isDiary && <div className="edit-diary">日記を編集</div>}
+      {isWeight && <div className="edit-diary">体重・体脂肪率を編集</div>}
+      <label>
+        日付
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          style={{ width: "100%", padding: "8px", marginBottom: "12px" }}
+        />
+      </label>
       {isDiary && (
         <>
-          <div className="edit-diary">日記を編集</div>
           <textarea
             value={diaryText}
             onChange={(e) => setDiaryText(e.target.value)}
@@ -61,7 +84,6 @@ const handleSave = () => {
 
       {isWeight && (
         <>
-          <div className="edit-diary">体重・体脂肪率を編集</div>
           <label>
             体重 (kg)
             <input
@@ -87,8 +109,8 @@ const handleSave = () => {
         className="submit-button"
         onClick={handleSave}
         disabled={
-          diaryText.trim() === "" &&
-          (weight.trim() === "" || bodyFat.trim() === "")
+          (isDiary && diaryText.trim() === "") ||
+          (isWeight && (weight.trim() === "" || bodyFat.trim() === ""))
         }
       >
         更新

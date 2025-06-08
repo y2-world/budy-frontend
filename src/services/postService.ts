@@ -101,7 +101,7 @@ export const deleteWeightRecord = (userId: string, timestamp: string): boolean =
 export const updateWeightRecord = (
   userId: string,
   timestamp: string,
-  updated: { weight?: number; bodyFat?: number }
+  updated: { weight?: number; bodyFat?: number; date?: string }
 ): boolean => {
   const raw = localStorage.getItem("records") || "{}";
   const allRecords = JSON.parse(raw);
@@ -148,7 +148,7 @@ export const deleteDiaryRecord = (userId: string, timestamp: string): boolean =>
 export const updateDiaryRecord = (
   userId: string,
   timestamp: string,
-  updates: { diary?: string },
+  updates: { diary?: string, date?: string },
 ): boolean => {
   const raw = localStorage.getItem("records") || "{}";
   const allRecords = JSON.parse(raw);
