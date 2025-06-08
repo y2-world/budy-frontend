@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Modal.css";
+import "../styles/Card.css";
 
 type Props = {
   record: {
@@ -68,6 +69,7 @@ const EditModalContent: React.FC<Props> = ({ record, onSave, onClose }) => {
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
+          className="input-field"
           style={{ width: "100%", padding: "8px", marginBottom: "12px" }}
         />
       </label>
