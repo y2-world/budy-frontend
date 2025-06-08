@@ -9,14 +9,20 @@
   font-size: 1.5rem;
 }
 
-/* styles/Weight.css などに追記 */
 .user-page {
   padding-bottom: 80px; /* ← ここを追加 */
 }
 
 .user-page p {
+  display: flex;
+  justify-content: center;
+}
+
+.user-page-data {
   font-size: 1rem;
   margin :0;
+  display: flex;
+  justify-content: center;
 }
 
 

@@ -5,7 +5,8 @@ import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
 import RecordCard from "./RecordCard";
 import Modal from "./Modal";
 import EditModalContent from "./EditModalContent";
-import { getLoggedInUserHeight } from "../services/userService"; 
+import { getLoggedInUserHeight } from "../services/userService";
+import { useLocation } from "react-router-dom";
 import {
   getWeightRecords,
   deleteWeightRecord,
@@ -15,21 +16,40 @@ import {
 const Weight: React.FC = () => {
   const currentUserId = localStorage.getItem("loggedInUser") ?? "";
   const [records, setRecords] = useState(() => getWeightRecords(currentUserId));
-
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
-
   const visibleCount = useInfiniteScroll(records.length);
-
   const height = getLoggedInUserHeight();
+  const location = useLocation();
 
- useEffect(() => {
-  const onRecordsUpdated = () => {
-    setRecords(getWeightRecords(currentUserId));
+  // 画面を更新してトースト表示する共通関数
+  const refreshRecordsAndShowToast = (message = "登録が完了しました！") => {
+    const records = getWeightRecords(currentUserId);
+    setRecords(records);
+    setToastMessage(message);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000);
   };
-  window.addEventListener("recordsUpdated", onRecordsUpdated);
-  return () => window.removeEventListener("recordsUpdated", onRecordsUpdated);
-}, []);
+
+  // storage イベントで他タブからの更新を検知
+  useEffect(() => {
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "recordsUpdated") {
+        refreshRecordsAndShowToast();
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, [currentUserId]);
+
+  // location.state.refresh が true なら更新＆トースト表示
+  useEffect(() => {
+    if (location.state?.refresh) {
+      const message = location.state.message ?? "更新しました";
+      refreshRecordsAndShowToast(message);
+      window.history.replaceState({}, document.title); // stateクリア
+    }
+  }, [location.key]);
 
   const [editingRecord, setEditingRecord] = useState<{
     timestamp: string;
@@ -41,10 +61,7 @@ const Weight: React.FC = () => {
     if (!window.confirm("本当にこの記録を削除しますか？")) return;
     const success = deleteWeightRecord(currentUserId, timestamp);
     if (success) {
-      setRecords(getWeightRecords(currentUserId));
-      setToastMessage("削除しました！");
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 2000);
+      refreshRecordsAndShowToast("削除しました！");
     }
   };
 
@@ -70,11 +87,8 @@ const Weight: React.FC = () => {
       bodyFat: parsedBodyFat,
     });
 
-    setRecords(getWeightRecords(currentUserId));
+    refreshRecordsAndShowToast("更新しました！");
     setEditingRecord(null);
-    setToastMessage("更新しました！");
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 2000);
   };
 
   const handleTabChange = (tab: string) => {
@@ -94,15 +108,18 @@ const Weight: React.FC = () => {
         <p>体重記録がありません。</p>
       ) : (
         <div className="card-container">
-          {records.slice(0, visibleCount).map((record) => (
-            <RecordCard
-              key={record.timestamp}
-              {...record}
-              onEdit={() => editRecord(record.timestamp)}
-              onDelete={() => deleteRecord(record.timestamp)}
-              height={height} // ← BMI 計算用に渡す
-            />
-          ))}
+          {records
+            .filter((record) => record.weight !== undefined)
+            .slice(0, visibleCount)
+            .map((record) => (
+              <RecordCard
+                key={record.timestamp}
+                {...record}
+                onEdit={() => editRecord(record.timestamp)}
+                onDelete={() => deleteRecord(record.timestamp)}
+                height={height}
+              />
+            ))}
         </div>
       )}
 

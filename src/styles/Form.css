@@ -108,6 +108,8 @@
 }
 
 button.form-start {
+  margin-top: 20px !important;
+  width: 150px;
   background-color: #005fa3 !important;
   color: white !important;
 }

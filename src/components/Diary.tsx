@@ -5,28 +5,49 @@ import RecordCard from "./RecordCard";
 import Modal from "./Modal";
 import EditModalContent from "./EditModalContent";
 import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
+import { useLocation } from "react-router-dom";
 import {
   getDiaryRecords,
   deleteDiaryRecord,
   updateDiaryRecord,
 } from "../services/postService";
 
-const currentUserId = localStorage.getItem("loggedInUser") ?? "";
-
 const Diary: React.FC = () => {
+  const currentUserId = localStorage.getItem("loggedInUser") ?? "";
   const [records, setRecords] = useState(() => getDiaryRecords(currentUserId));
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const visibleCount = useInfiniteScroll(records.length);
+  const location = useLocation();
 
-  // localStorage更新を監視してリアルタイム更新（Footerのイベントと連携）
+  // 画面を更新してトースト表示する共通関数
+  const refreshRecordsAndShowToast = (message = "登録が完了しました！") => {
+    const records = getDiaryRecords(currentUserId);
+    setRecords(records);
+    setToastMessage(message);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000);
+  };
+
+  // storage イベントで他タブからの更新を検知
   useEffect(() => {
-    const onRecordsUpdated = () => {
-      setRecords(getDiaryRecords(currentUserId));
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "recordsUpdated") {
+        refreshRecordsAndShowToast();
+      }
     };
-    window.addEventListener("recordsUpdated", onRecordsUpdated);
-    return () => window.removeEventListener("recordsUpdated", onRecordsUpdated);
-  }, []);
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, [currentUserId]);
+
+  // location.state.refresh が true なら更新＆トースト表示
+  useEffect(() => {
+    if (location.state?.refresh) {
+      const message = location.state.message ?? "更新しました";
+      refreshRecordsAndShowToast(message);
+      window.history.replaceState({}, document.title); // stateクリア
+    }
+  }, [location.key]);
 
   // 編集対象のレコード
   const [editingRecord, setEditingRecord] = useState<{
@@ -38,16 +59,13 @@ const Diary: React.FC = () => {
   const deleteRecord = (timestamp: string) => {
     if (!window.confirm("本当にこの日記を削除しますか？")) return;
     const success = deleteDiaryRecord(currentUserId, timestamp);
-    if(success) {
-      setRecords(getDiaryRecords(currentUserId));
-       setToastMessage("削除しました！");
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 2000);
+    if (success) {
+      refreshRecordsAndShowToast("削除しました！");
     }
   };
 
   // 編集開始
-     const editRecord = (timestamp: string) => {
+  const editRecord = (timestamp: string) => {
     const record = records.find((r) => r.timestamp === timestamp);
     if (record) {
       setEditingRecord({ timestamp, diary: record.diary ?? "" });
@@ -57,25 +75,21 @@ const Diary: React.FC = () => {
   // 編集内容保存
   const handleSaveEdit = (updatedData: { diary?: string }) => {
     if (!editingRecord) return;
-
-    const updatedDiary = updatedData.diary ?? "";
-    if (updatedDiary.trim() === "") {
+    const updatedDiary = (updatedData.diary ?? "").trim();
+    if (!updatedDiary) {
       alert("日記の内容は空白にできません。");
       return;
     }
 
-    updateDiaryRecord(currentUserId, editingRecord.timestamp, {diary: updatedDiary});
-
-    setRecords(getDiaryRecords(currentUserId));
+    updateDiaryRecord(currentUserId, editingRecord.timestamp, {
+      diary: updatedDiary,
+    });
+    
+    refreshRecordsAndShowToast("更新しました！");
     setEditingRecord(null);
-    setToastMessage("更新しました！");
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 2000);
   };
 
-  // Footer用タブ切替（必要なら）
   const handleTabChange = (tab: string) => {
-    // 現状空実装。必要ならページ遷移等を追加
     console.log("Tab changed to:", tab);
   };
 

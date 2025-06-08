@@ -8,6 +8,7 @@ type Props = {
   bodyFat?: number | null;
   diary?: string;
   timestamp?: string;
+  date?: string;
   height?: number | null;
   onEdit?: () => void;
   onDelete?: () => void;
@@ -18,6 +19,7 @@ const RecordCard: React.FC<Props> = ({
   bodyFat,
   diary,
   timestamp,
+  date,
   onEdit,
   onDelete,
 }) => {
@@ -65,13 +67,16 @@ const RecordCard: React.FC<Props> = ({
       className="record-card"
       style={{ position: "relative", paddingRight: "40px" }}
     >
-      <h3>{formattedTime}</h3>
+      <h3>{date && date.replace(/-/g, "/")}</h3>
       {weight !== undefined && <p>体重: {weight} kg</p>}
       {bodyFat !== null && bodyFat !== undefined && (
         <p>体脂肪率: {bodyFat.toFixed(1)}%</p>
       )}
       {bmi && <p>BMI: {bmi}</p>}
       {diary && <p>{diary}</p>}
+       <div className="card-date">
+       {formattedTime}
+       </div>
 
       <div
         className="post-actions"

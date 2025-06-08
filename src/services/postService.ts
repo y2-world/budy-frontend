@@ -31,6 +31,7 @@ export const getAllPosts = (): { posts: Post[]; users:{[email:string]: User }} =
                     email,
                     id: email + timestamp,
                     likeCount: (post as any).likeCount || 0,
+                    date: (post as any).date || new Date(timestamp).toISOString().slice(0, 10), // ← 追加・補完
                 });
             }
         }
@@ -69,15 +70,23 @@ export const toggleLikeLocal = (post: Post, liked: boolean): void => {
 import type { WeightRecord } from "../types/record";
 
 export const getWeightRecords = (userId: string): WeightRecord[] => {
-    const raw = localStorage.getItem("records") || "{}";
-    const allRecords = JSON.parse(raw);
-    const userRecords = allRecords[userId] || {};
-    return Object.entries(userRecords).map(([timestamp, data]: any) => ({
-        timestamp,
-        weight: data.weight,
-        bodyFat: data.bodyFat,
-        userId,
-    }));
+  const raw = localStorage.getItem("records") || "{}";
+  const allRecords = JSON.parse(raw);
+  const userRecords = allRecords[userId] || {};
+
+  return Object.entries(userRecords)
+  .map(([timestamp, data]: any) => ({
+    timestamp,
+    date: data.date,
+    weight: data.weight,
+    bodyFat: data.bodyFat,
+    userId,
+  }))
+  .sort((a, b) => {
+    if (a.date > b.date) return -1;
+    if (a.date < b.date) return 1;
+    return b.timestamp.localeCompare(a.timestamp);
+  });
 };
 
 export const deleteWeightRecord = (userId: string, timestamp: string): boolean => {
@@ -115,10 +124,15 @@ export const getDiaryRecords = (userId: string): DiaryRecord[] => {
   const allRecords = JSON.parse(raw);
   const userRecords = allRecords[userId] || {};
 
-  // Object.values の型推論に型アサーションを追加
-  return (Object.values(userRecords) as DiaryRecord[]).filter(
+  return (Object.values(userRecords) as DiaryRecord[])
+  .filter(
     (record) => typeof record.diary === "string" && record.diary.trim() !== ""
-  );
+  )
+  .sort((a, b) => {
+    if (a.date > b.date) return -1;
+    if (a.date < b.date) return 1;
+    return b.timestamp.localeCompare(a.timestamp);
+  });
 };
 
 export const deleteDiaryRecord = (userId: string, timestamp: string): boolean => {
@@ -134,7 +148,7 @@ export const deleteDiaryRecord = (userId: string, timestamp: string): boolean =>
 export const updateDiaryRecord = (
   userId: string,
   timestamp: string,
-  updates: { diary?: string }
+  updates: { diary?: string },
 ): boolean => {
   const raw = localStorage.getItem("records") || "{}";
   const allRecords = JSON.parse(raw);

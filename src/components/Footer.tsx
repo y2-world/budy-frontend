@@ -20,13 +20,12 @@ const Footer: React.FC<FooterProps> = ({ onTabChange }) => {
 
   const getTodayString = () => {
     const today = new Date();
-    const offset = today.getTimezoneOffset(); // 分単位
+    const offset = today.getTimezoneOffset();
     const localDate = new Date(today.getTime() - offset * 60000);
-    return localDate.toISOString().split("T")[0]; // これでJST基準になる
+    return localDate.toISOString().split("T")[0];
   };
 
   const userId = localStorage.getItem("loggedInUser");
-
   const [selectedDate, setSelectedDate] = useState(getTodayString());
 
   const saveRecord = () => {
@@ -51,9 +50,7 @@ const Footer: React.FC<FooterProps> = ({ onTabChange }) => {
     }
 
     const now = new Date();
-    const timestamp = new Date(
-      `${selectedDate}T${now.toTimeString().split(" ")[0]}`
-    ).toISOString();
+    const timestamp = now.toISOString();
 
     if (activeTab === "weight") {
       allUsersRecords[userId][timestamp] = {
@@ -73,13 +70,19 @@ const Footer: React.FC<FooterProps> = ({ onTabChange }) => {
     }
 
     localStorage.setItem("records", JSON.stringify(allUsersRecords));
-    window.dispatchEvent(new Event("recordsUpdated"));
+
+    // タイムスタンプを変更してstorageイベント通知（他タブ用）
+    localStorage.setItem("recordsUpdated", Date.now().toString());
 
     setShowToast(true);
     setTimeout(() => setShowToast(false), 2000);
 
+    // navigateでstateを渡し、リスト側で更新をトリガー
     navigate(activeTab === "weight" ? "/weight" : "/diary", {
-      state: { showToast: true },
+      state: {
+        refresh: true,
+        message: "登録が完了しました！",
+      },
     });
   };
 
@@ -107,7 +110,6 @@ const Footer: React.FC<FooterProps> = ({ onTabChange }) => {
     setDiary("");
   };
 
-  // 未入力や不正値があるかどうか判定
   const isSubmitDisabled = () => {
     if (activeTab === "weight") {
       if (weight === "" || weight <= 0) return true;

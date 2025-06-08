@@ -80,7 +80,7 @@ const TimeLine: React.FC = () => {
                     <h4>{user?.name || "名前未設定"}さん</h4>
                   </div>
                   <div className="timeline-diary">{post.diary}</div>
-                  <div className="timeline-date">
+                  <div className="card-date">
                     {post.timestamp
                       ? new Date(post.timestamp).toLocaleString("ja-JP")
                       : ""}

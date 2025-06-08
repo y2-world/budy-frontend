@@ -103,20 +103,20 @@ function UserPage() {
       <section className="user-stats">
         <div>
           {currentYear}年{currentMonth}月{currentDay}日
-          <p>
+          <div className="user-page-data">
             {" "}
             {currentTime.toLocaleTimeString("ja-JP", {
               hour: "2-digit",
               minute: "2-digit",
               second: "2-digit",
             })}
-          </p>
+          </div>
         </div>
         <div>
           目標体重 {userTargetWeight}kg
           {currentWeight !== null && userTargetWeight !== "" && (
             <>
-              <p>
+              <div className="user-page-data">
                 (目標体重まで{" "}
                 {Math.max(
                   0,
@@ -125,7 +125,7 @@ function UserPage() {
                   )
                 )}
                 kg)
-              </p>
+              </div>
             </>
           )}
         </div>
