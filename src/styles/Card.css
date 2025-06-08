@@ -56,13 +56,14 @@ label {
   border-radius: 4px;
 }
 
-.input-field[type="date"] {
+input[type="date"].input-field {
+  -webkit-appearance: none;
+  appearance: none;
   width: 100%;
   min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
 }
-
 .save-button {
   padding: 0.5rem 1rem;
   background-color: #007bff;
