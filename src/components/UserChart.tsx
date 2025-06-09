@@ -97,6 +97,7 @@ function UserChart({ userEmail }: Props) {
             },
             title: {
               display: true,
+              text: "体重と体脂肪率の推移",
             },
           },
           scales: {
