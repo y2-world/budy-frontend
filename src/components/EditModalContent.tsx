@@ -5,7 +5,7 @@ import "../styles/Card.css";
 type Props = {
   record: {
     timestamp: string;
-    date: string;
+    date?: string;
     diary?: string;
     weight?: string;
     bodyFat?: string;
@@ -36,7 +36,7 @@ const EditModalContent: React.FC<Props> = ({ record, onSave, onClose }) => {
     setDiaryText(record.diary || "");
     setWeight(record.weight || "");
     setBodyFat(record.bodyFat || "");
-    setDate(record.date);
+    setDate(record.date ?? "");
   }, [record]);
 
   const handleSave = () => {
@@ -47,7 +47,7 @@ const EditModalContent: React.FC<Props> = ({ record, onSave, onClose }) => {
       bodyFat?: string;
     } = {};
 
-    const originalDate = record.date.slice(0, 10);
+    const originalDate = record.date?.slice(0, 10) ?? "";
     if (date !== originalDate) {
       updated.date = date;
     }
