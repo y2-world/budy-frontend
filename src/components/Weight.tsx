@@ -55,6 +55,7 @@ const Weight: React.FC = () => {
     timestamp: string;
     weight?: string;
     bodyFat?: string;
+    date?: string;
   } | null>(null);
 
   const deleteRecord = (timestamp: string) => {
@@ -72,6 +73,7 @@ const Weight: React.FC = () => {
         timestamp,
         weight: record.weight?.toString() ?? "",
         bodyFat: record.bodyFat?.toString() ?? "",
+        date: record.date ?? record.timestamp
       });
     }
   };

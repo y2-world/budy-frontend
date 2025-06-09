@@ -4,13 +4,13 @@ import "../styles/Card.css";
 
 type Props = {
   record: {
-    timestamp: string;
+    date: string;
     diary?: string;
     weight?: string;
     bodyFat?: string;
   };
   onSave: (updatedData: {
-    timestamp?: string;
+    date?: string;
     diary?: string;
     weight?: string;
     bodyFat?: string;
@@ -22,7 +22,12 @@ const EditModalContent: React.FC<Props> = ({ record, onSave, onClose }) => {
   const [diaryText, setDiaryText] = useState(record.diary || "");
   const [weight, setWeight] = useState(record.weight || "");
   const [bodyFat, setBodyFat] = useState(record.bodyFat || "");
-  const [date, setDate] = useState(() => record.timestamp.slice(0, 10));
+  const [date, setDate] = useState(() => {
+    const initialDate = record.date ?? "";
+    return initialDate.slice(0, 10);
+  });
+  console.log(record.date);
+  console.log(record.weight);
 
   // ここで定義を移動
   const isDiary = "diary" in record;
@@ -32,7 +37,7 @@ const EditModalContent: React.FC<Props> = ({ record, onSave, onClose }) => {
     setDiaryText(record.diary || "");
     setWeight(record.weight || "");
     setBodyFat(record.bodyFat || "");
-    setDate(record.timestamp.slice(0, 10));
+    setDate(record.date);
   }, [record]);
 
   const handleSave = () => {
@@ -43,8 +48,8 @@ const EditModalContent: React.FC<Props> = ({ record, onSave, onClose }) => {
       bodyFat?: string;
     } = {};
 
-    const formatDate = (d: string) => new Date(d).toISOString().slice(0, 10);
-    if (formatDate(date) !== formatDate(record.timestamp)) {
+    const originalDate = record.date.slice(0, 10);
+    if (date !== originalDate) {
       updated.date = date;
     }
 

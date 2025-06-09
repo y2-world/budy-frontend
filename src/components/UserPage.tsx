@@ -1,13 +1,13 @@
 import Footer from "./Footer";
 import { useState, useEffect } from "react";
 import OnboardingModal from "./OnboardingModal"; // OnboardingModalのインポート
+import UserChart from "./UserChart";
 import "../styles/UserPage.css";
 import "../styles/Modal.css";
 import "../styles/Form.css";
 
 function UserPage() {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
-  // const [userName, setUserName] = useState<string>("ゲスト");
   const [userTargetWeight, setUserTargetWeight] = useState<string>("");
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [currentWeight, setCurrentWeight] = useState<number | null>(null);
@@ -18,8 +18,6 @@ function UserPage() {
   const currentYear = date.getFullYear();
   const currentMonth = date.getMonth() + 1; // 月は0から始まるため+1
   const currentDay = date.getDate();
-
-  // const navigate = useNavigate();
 
   useEffect(() => {
     const storedEmail = localStorage.getItem("loggedInUser");
@@ -40,7 +38,6 @@ function UserPage() {
 
       setLoggedInUser(guestEmail);
       localStorage.setItem("loggedInUser", guestEmail);
-      // setUserName(guestUser.name || "ゲスト");
       setUserTargetWeight(guestUser.targetWeight || "");
 
       if (!guestUser.onboarded) {
@@ -93,7 +90,6 @@ function UserPage() {
     const storedUsers = JSON.parse(localStorage.getItem("users") || "{}");
     if (storedEmail && storedUsers[storedEmail]) {
       const user = storedUsers[storedEmail];
-      // setUserName(user.name || "ゲスト");
       setUserTargetWeight(user.targetWeight || "");
     }
   };
@@ -138,7 +134,13 @@ function UserPage() {
           </div>
         </div>
       </div>
-      <section className="user-graph"></section>
+      <section className="user-graph">
+        <div className="card-container">
+          <div className="record-card">
+            {loggedInUser && <UserChart userEmail={loggedInUser} />}
+          </div>
+        </div>
+      </section>
       <Footer onTabChange={() => {}} />
       {showOnboarding && loggedInUser && (
         <div className="modal-overlay">
@@ -148,7 +150,7 @@ function UserPage() {
               onClose={() => {
                 setShowOnboarding(false);
                 refreshUserData();
-              }} // ここでデータ更新
+              }}
             />
           </div>
         </div>

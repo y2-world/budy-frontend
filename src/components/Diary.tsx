@@ -53,6 +53,7 @@ const Diary: React.FC = () => {
   const [editingRecord, setEditingRecord] = useState<{
     timestamp: string;
     diary: string;
+    date?: string;
   } | null>(null);
 
   // 削除処理
@@ -68,7 +69,11 @@ const Diary: React.FC = () => {
   const editRecord = (timestamp: string) => {
     const record = records.find((r) => r.timestamp === timestamp);
     if (record) {
-      setEditingRecord({ timestamp, diary: record.diary ?? "" });
+      setEditingRecord({
+        timestamp,
+        diary: record.diary ?? "",
+        date: record.date ?? record.timestamp, 
+      });
     }
   };
 
