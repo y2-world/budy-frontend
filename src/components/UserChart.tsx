@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import {
   Chart as ChartJS,
   LineElement,
@@ -18,7 +19,8 @@ ChartJS.register(
   LinearScale,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels
 );
 
 type Props = {
@@ -101,11 +103,15 @@ function UserChart({ userEmail }: Props) {
   if (!chartData) return <div>Loading chart...</div>;
 
   return (
-    <div
-      ref={scrollRef}
-      style={{ overflowX: "auto", width: "100%" }}
-    >
-      <div style={{ width: 1000, maxWidth: "1000px", margin: "0 auto", height: 440 }}>
+    <div ref={scrollRef} style={{ overflowX: "auto", width: "100%" }}>
+      <div
+        style={{
+          width: 1000,
+          maxWidth: "1000px",
+          margin: "0 auto",
+          height: 440,
+        }}
+      >
         <Line
           data={chartData}
           options={{
@@ -118,6 +124,17 @@ function UserChart({ userEmail }: Props) {
               title: {
                 display: true,
                 text: "体重と体脂肪率の推移",
+              },
+              datalabels: {
+                display: true,
+                color: "#000",
+                font: {
+                  weight: "bold",
+                },
+                align: "top",
+                formatter: function (value: number) {
+                  return value !== null ? value.toFixed(1) : "";
+                },
               },
             },
             scales: {
