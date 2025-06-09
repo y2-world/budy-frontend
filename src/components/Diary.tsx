@@ -53,6 +53,9 @@ const Diary: React.FC = () => {
   const [editingRecord, setEditingRecord] = useState<{
     timestamp: string;
     date?: string;
+    diary?: string;
+    weight?: string;
+    bodyFat?: string;
   } | null>(null);
 
   // 削除処理
