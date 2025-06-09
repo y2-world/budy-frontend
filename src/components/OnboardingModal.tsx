@@ -139,12 +139,20 @@ function OnboardingModal({ userEmail, onClose }: OnboardingModalProps) {
                     style={{ color: "black" }}
                   />
                 </span>
-                <span className="tutorial-slide" onClick={handleSubmit}>
-                  <FontAwesomeIcon
-                    icon={faArrowRight}
-                    style={{ color: "black" }}
-                  />
-                </span>
+
+                <button
+                  className="icon-button"
+                  onClick={handleSubmit}
+                  disabled={
+                    !birthday ||
+                    !height ||
+                    !weight ||
+                    !!heightError ||
+                    !!weightError
+                  }
+                >
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </button>
               </div>
             </div>
           </div>

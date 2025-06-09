@@ -8,7 +8,7 @@ function TutorialContent({ onClose }: { onClose: () => void }) {
   const slides = [
     {
       title: "ようこそ！",
-      content: "このアプリでは、日々の食事や運動を記録できます。",
+      content: "このアプリでは、日々の体重や日記を記録できます。",
     },
     {
       title: "記録を追加",
@@ -17,7 +17,7 @@ function TutorialContent({ onClose }: { onClose: () => void }) {
     {
       title: "グラフで確認",
       content:
-        "体重や消費カロリーをグラフで確認し、<br>モチベーションを維持しましょう。",
+        "体重や体脂肪率をグラフで確認し、<br>モチベーションを維持しましょう。",
     },
     {
       title: "準備完了！",
