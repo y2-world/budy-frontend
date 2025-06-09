@@ -95,56 +95,52 @@ function UserChart({ userEmail }: Props) {
   if (!chartData) return <div>Loading chart...</div>;
 
   return (
-    <div style={{ width: "80%", maxWidth: "1000px", margin: "0 auto" }}>
-      <Line
-        data={chartData}
-        options={{
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "bottom", // "top" よりも自然に見える場合あり
-              labels: {
-                usePointStyle: true,
-                padding: 20,
-                font: {
-                  size: 14,
+    <div style={{ overflowX: "auto", width: "100%" }}>
+      <div style={{ width: 1000, maxWidth: "1000px", margin: "0 auto", height: 440 }}>
+        <Line
+          data={chartData}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false, // 必要なら高さ調整しやすく
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              title: {
+                display: true,
+                text: "体重と体脂肪率の推移",
+              },
+            },
+            scales: {
+              y1: {
+                type: "linear",
+                position: "left",
+                title: {
+                  display: true,
+                  text: "体重 (kg)",
+                },
+                ticks: {
+                  stepSize: 1,
+                },
+              },
+              y2: {
+                type: "linear",
+                position: "right",
+                title: {
+                  display: true,
+                  text: "体脂肪率 (%)",
+                },
+                grid: {
+                  drawOnChartArea: false,
+                },
+                ticks: {
+                  stepSize: 1,
                 },
               },
             },
-            title: {
-              display: true,
-              text: "体重と体脂肪率の推移",
-            },
-          },
-          scales: {
-            y1: {
-              type: "linear",
-              position: "left",
-              title: {
-                display: true,
-                text: "体重 (kg)",
-              },
-              ticks: {
-                stepSize: 1, // 任意、例：1kg刻み
-              },
-            },
-            y2: {
-              type: "linear",
-              position: "right",
-              title: {
-                display: true,
-                text: "体脂肪率 (%)",
-              },
-              grid: {
-                drawOnChartArea: false,
-              },
-              ticks: {
-                stepSize: 1, // 任意、例：1%刻み
-              },
-            },
-          },
-        }}
-      />
+          }}
+        />
+      </div>
     </div>
   );
 }
