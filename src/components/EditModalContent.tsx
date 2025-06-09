@@ -84,8 +84,10 @@ const EditModalContent: React.FC<Props> = ({ record, onSave, onClose }) => {
             value={diaryText}
             onChange={(e) => setDiaryText(e.target.value)}
             rows={7}
+            maxLength={300}
             style={{ width: "100%", padding: "8px" }}
           />
+           <p style={{ color: "#333", fontWeight: "bold" }}>{diaryText.length}/300</p>
         </>
       )}
 
