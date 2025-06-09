@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Chart as ChartJS,
   LineElement,
@@ -34,6 +34,7 @@ type RecordEntry = {
 
 function UserChart({ userEmail }: Props) {
   const [chartData, setChartData] = useState<any>(null);
+  const scrollRef = useRef<HTMLDivElement>(null); // 👈 ref を追加
 
   useEffect(() => {
     const storedRecords = JSON.parse(localStorage.getItem("records") || "{}");
@@ -44,13 +45,11 @@ function UserChart({ userEmail }: Props) {
     Object.values(userRecords).forEach((entry: any) => {
       const { date, weight, bodyFat, timestamp } = entry;
 
-      // 現在保持しているのがない場合はセット
       if (!latestByDate[date]) {
         if (weight !== undefined || bodyFat !== undefined) {
           latestByDate[date] = { date, weight, bodyFat, timestamp };
         }
       } else {
-        // すでにある場合は、timestampが新しく、かつweightかbodyFatが存在する場合のみ上書き
         if (
           (weight !== undefined || bodyFat !== undefined) &&
           new Date(timestamp).getTime() >
@@ -92,16 +91,26 @@ function UserChart({ userEmail }: Props) {
     });
   }, [userEmail]);
 
+  // 👇 スマホ表示なら初期スクロールを右端に
+  useEffect(() => {
+    if (window.innerWidth <= 600 && scrollRef.current) {
+      scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+    }
+  }, [chartData]);
+
   if (!chartData) return <div>Loading chart...</div>;
 
   return (
-    <div style={{ overflowX: "auto", width: "100%" }}>
+    <div
+      ref={scrollRef}
+      style={{ overflowX: "auto", width: "100%" }}
+    >
       <div style={{ width: 1000, maxWidth: "1000px", margin: "0 auto", height: 440 }}>
         <Line
           data={chartData}
           options={{
             responsive: true,
-            maintainAspectRatio: false, // 必要なら高さ調整しやすく
+            maintainAspectRatio: false,
             plugins: {
               legend: {
                 position: "top",
