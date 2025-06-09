@@ -43,12 +43,21 @@ function UserChart({ userEmail }: Props) {
 
     Object.values(userRecords).forEach((entry: any) => {
       const { date, weight, bodyFat, timestamp } = entry;
-      if (
-        !latestByDate[date] ||
-        new Date(timestamp).getTime() >
-          new Date(latestByDate[date].timestamp ?? "").getTime()
-      ) {
-        latestByDate[date] = { date, weight, bodyFat, timestamp };
+
+      // 現在保持しているのがない場合はセット
+      if (!latestByDate[date]) {
+        if (weight !== undefined || bodyFat !== undefined) {
+          latestByDate[date] = { date, weight, bodyFat, timestamp };
+        }
+      } else {
+        // すでにある場合は、timestampが新しく、かつweightかbodyFatが存在する場合のみ上書き
+        if (
+          (weight !== undefined || bodyFat !== undefined) &&
+          new Date(timestamp).getTime() >
+            new Date(latestByDate[date].timestamp ?? "").getTime()
+        ) {
+          latestByDate[date] = { date, weight, bodyFat, timestamp };
+        }
       }
     });
 
@@ -93,7 +102,14 @@ function UserChart({ userEmail }: Props) {
           responsive: true,
           plugins: {
             legend: {
-              position: "top" as const,
+              position: "bottom", // "top" よりも自然に見える場合あり
+              labels: {
+                usePointStyle: true,
+                padding: 20,
+                font: {
+                  size: 14,
+                },
+              },
             },
             title: {
               display: true,
@@ -108,6 +124,9 @@ function UserChart({ userEmail }: Props) {
                 display: true,
                 text: "体重 (kg)",
               },
+              ticks: {
+                stepSize: 1, // 任意、例：1kg刻み
+              },
             },
             y2: {
               type: "linear",
@@ -118,6 +137,9 @@ function UserChart({ userEmail }: Props) {
               },
               grid: {
                 drawOnChartArea: false,
+              },
+              ticks: {
+                stepSize: 1, // 任意、例：1%刻み
               },
             },
           },
