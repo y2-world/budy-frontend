@@ -52,7 +52,6 @@ const Diary: React.FC = () => {
   // 編集対象のレコード
   const [editingRecord, setEditingRecord] = useState<{
     timestamp: string;
-    diary: string;
     date?: string;
   } | null>(null);
 
@@ -72,7 +71,7 @@ const Diary: React.FC = () => {
       setEditingRecord({
         timestamp,
         diary: record.diary ?? "",
-        date: record.date ?? record.timestamp, 
+        date: record.date ?? record.timestamp,
       });
     }
   };

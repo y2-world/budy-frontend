@@ -4,6 +4,7 @@ import "../styles/Card.css";
 
 type Props = {
   record: {
+    timestamp: string;
     date: string;
     diary?: string;
     weight?: string;
@@ -26,8 +27,6 @@ const EditModalContent: React.FC<Props> = ({ record, onSave, onClose }) => {
     const initialDate = record.date ?? "";
     return initialDate.slice(0, 10);
   });
-  console.log(record.date);
-  console.log(record.weight);
 
   // ここで定義を移動
   const isDiary = "diary" in record;
