@@ -133,14 +133,12 @@ function UserPage() {
             </div>
           </div>
         </div>
-      </div>
-      <section className="user-graph">
-        <div className="card-container">
+        <section className="user-graph">
           <div className="record-card">
             {loggedInUser && <UserChart userEmail={loggedInUser} />}
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
       <Footer onTabChange={() => {}} />
       {showOnboarding && loggedInUser && (
         <div className="modal-overlay">
