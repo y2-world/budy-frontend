@@ -215,7 +215,7 @@ const Footer: React.FC<FooterProps> = ({ onTabChange }) => {
                   rows={7}
                   maxLength={300}
                 />
-                <p>{diary.length}/300</p>
+                <p style={{ margin: 0 }}>{diary.length}/300</p>
               </label>
             )}
 

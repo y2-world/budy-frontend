@@ -79,7 +79,8 @@ const EditModalContent: React.FC<Props> = ({ record, onSave, onClose }) => {
         />
       </label>
       {isDiary && (
-        <>
+        <label>
+          日記
           <textarea
             value={diaryText}
             onChange={(e) => setDiaryText(e.target.value)}
@@ -87,8 +88,10 @@ const EditModalContent: React.FC<Props> = ({ record, onSave, onClose }) => {
             maxLength={300}
             style={{ width: "100%", padding: "8px" }}
           />
-           <p style={{ color: "#333", fontWeight: "bold" }}>{diaryText.length}/300</p>
-        </>
+          <p style={{ color: "#333", fontWeight: "bold", margin: "0" }}>
+            {diaryText.length}/300
+          </p>
+        </label>
       )}
 
       {isWeight && (

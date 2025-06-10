@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import zoomPlugin from "chartjs-plugin-zoom";
 import {
@@ -38,7 +38,7 @@ type RecordEntry = {
 
 function UserChart({ userEmail }: Props) {
   const [chartData, setChartData] = useState<any>(null);
-  const scrollRef = useRef<HTMLDivElement>(null); // 👈 ref を追加
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const storedRecords = JSON.parse(localStorage.getItem("records") || "{}");
@@ -95,118 +95,108 @@ function UserChart({ userEmail }: Props) {
     });
   }, [userEmail]);
 
-  // 👇 スマホ表示なら初期スクロールを右端に
+  // 初期スクロールを右端に
   useEffect(() => {
     if (window.innerWidth <= 600 && scrollRef.current) {
       scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
     }
   }, [chartData]);
 
+  const chartOptions = useMemo(
+    () => ({
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: "index" as const,
+        intersect: false,
+      },
+      plugins: {
+        legend: {
+          position: "top" as const,
+          labels: {
+            font: {
+              size: 12,
+            },
+          },
+        },
+        title: {
+          display: false,
+        },
+        datalabels: {
+          display: false,
+        },
+        zoom: {
+          pan: {
+            enabled: window.innerWidth > 600,
+            mode: "x" as const,
+          },
+          zoom: {
+            wheel: {
+              enabled: window.innerWidth > 600,
+            },
+            pinch: {
+              enabled: window.innerWidth > 600,
+            },
+            mode: "x" as const,
+          },
+        },
+      },
+      scales: {
+        x: {
+          ticks: {
+            autoSkip: true,
+            maxRotation: 0,
+            font: {
+              size: 10,
+            },
+          },
+        },
+        y1: {
+          position: "left" as const,
+          title: {
+            display: true,
+            text: "体重 (kg)",
+            font: {
+              size: 12,
+            },
+          },
+          ticks: {
+            stepSize: 1,
+            font: {
+              size: 10,
+            },
+          },
+        },
+        y2: {
+          position: "right" as const,
+          title: {
+            display: true,
+            text: "体脂肪率 (%)",
+            font: {
+              size: 12,
+            },
+          },
+          grid: {
+            drawOnChartArea: false,
+          },
+          ticks: {
+            stepSize: 1,
+            font: {
+              size: 10,
+            },
+          },
+        },
+      },
+    }),
+    []
+  );
+
   if (!chartData) return <div>Loading chart...</div>;
 
-return (
-  <div ref={scrollRef} style={{ width: "100%", overflowX: "auto" }}>
-      <div style={{ minWidth: "800px", height: "300px" }}>
-        <Line
-          data={chartData}
-          options={{
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-              mode: "index",
-              intersect: false,
-            },
-            plugins: {
-              legend: {
-                position: "top",
-                labels: {
-                  font: {
-                    size: 12,
-                  },
-                },
-              },
-              title: {
-                display: false, // モバイルでは非表示の方が見やすい
-              },
-              datalabels: {
-                display: (context) => {
-                  // データ数が多いときは省略
-                  return !!(context.chart.data && context.chart.data.labels && context.chart.data.labels.length <= 7);
-                },
-                color: "#000",
-                font: {
-                  weight: "bold",
-                  size: 10,
-                },
-                align: "top",
-                formatter: function (value: number) {
-                  return value !== null ? value.toFixed(1) : "";
-                },
-              },
-              zoom: {
-                pan: {
-                  enabled: true,
-                  mode: "x",
-                },
-                zoom: {
-                  pinch: {
-                    enabled: true,
-                  },
-                  wheel: {
-                    enabled: true,
-                  },
-                  mode: "x",
-                },
-              },
-            },
-            scales: {
-              x: {
-                ticks: {
-                  autoSkip: true,
-                  maxRotation: 0,
-                  font: {
-                    size: 10,
-                  },
-                },
-              },
-              y1: {
-                position: "left",
-                title: {
-                  display: true,
-                  text: "体重 (kg)",
-                  font: {
-                    size: 12,
-                  },
-                },
-                ticks: {
-                  stepSize: 1,
-                  font: {
-                    size: 10,
-                  },
-                },
-              },
-              y2: {
-                position: "right",
-                title: {
-                  display: true,
-                  text: "体脂肪率 (%)",
-                  font: {
-                    size: 12,
-                  },
-                },
-                grid: {
-                  drawOnChartArea: false,
-                },
-                ticks: {
-                  stepSize: 1,
-                  font: {
-                    size: 10,
-                  },
-                },
-              },
-            },
-          }}
-        />
+  return (
+    <div ref={scrollRef} style={{ width: "100%", overflowX: "auto" }}>
+      <div style={{ height: "400px" }}>
+        <Line data={chartData} options={chartOptions} />
       </div>
     </div>
   );
