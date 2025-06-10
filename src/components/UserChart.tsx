@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import zoomPlugin from "chartjs-plugin-zoom";
 import {
   Chart as ChartJS,
   LineElement,
@@ -20,7 +21,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ChartDataLabels
+  ChartDataLabels,
+  zoomPlugin
 );
 
 type Props = {
@@ -102,65 +104,104 @@ function UserChart({ userEmail }: Props) {
 
   if (!chartData) return <div>Loading chart...</div>;
 
-  return (
-    <div ref={scrollRef} style={{ overflowX: "auto", width: "100%" }}>
-      <div
-        style={{
-          width: 1000,
-          maxWidth: "1000px",
-          margin: "0 auto",
-          height: 440,
-        }}
-      >
+return (
+  <div ref={scrollRef} style={{ width: "100%", overflowX: "auto" }}>
+      <div style={{ minWidth: "800px", height: "300px" }}>
         <Line
           data={chartData}
           options={{
             responsive: true,
             maintainAspectRatio: false,
+            interaction: {
+              mode: "index",
+              intersect: false,
+            },
             plugins: {
               legend: {
                 position: "top",
+                labels: {
+                  font: {
+                    size: 12,
+                  },
+                },
               },
               title: {
-                display: true,
-                text: "体重と体脂肪率の推移",
+                display: false, // モバイルでは非表示の方が見やすい
               },
               datalabels: {
-                display: true,
+                display: (context) => {
+                  // データ数が多いときは省略
+                  return !!(context.chart.data && context.chart.data.labels && context.chart.data.labels.length <= 7);
+                },
                 color: "#000",
                 font: {
                   weight: "bold",
+                  size: 10,
                 },
                 align: "top",
                 formatter: function (value: number) {
                   return value !== null ? value.toFixed(1) : "";
                 },
               },
+              zoom: {
+                pan: {
+                  enabled: true,
+                  mode: "x",
+                },
+                zoom: {
+                  pinch: {
+                    enabled: true,
+                  },
+                  wheel: {
+                    enabled: true,
+                  },
+                  mode: "x",
+                },
+              },
             },
             scales: {
+              x: {
+                ticks: {
+                  autoSkip: true,
+                  maxRotation: 0,
+                  font: {
+                    size: 10,
+                  },
+                },
+              },
               y1: {
-                type: "linear",
                 position: "left",
                 title: {
                   display: true,
                   text: "体重 (kg)",
+                  font: {
+                    size: 12,
+                  },
                 },
                 ticks: {
                   stepSize: 1,
+                  font: {
+                    size: 10,
+                  },
                 },
               },
               y2: {
-                type: "linear",
                 position: "right",
                 title: {
                   display: true,
                   text: "体脂肪率 (%)",
+                  font: {
+                    size: 12,
+                  },
                 },
                 grid: {
                   drawOnChartArea: false,
                 },
                 ticks: {
                   stepSize: 1,
+                  font: {
+                    size: 10,
+                  },
                 },
               },
             },
