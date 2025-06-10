@@ -21,7 +21,7 @@ const Footer: React.FC<FooterProps> = ({ onTabChange }) => {
   const location = useLocation();
 
   React.useEffect(() => {
-    if (location.pathname === "/diary") {
+    if (location.pathname === "/diary" || location.pathname === "/timeline") {
       setActiveTab("diary");
     } else if (location.pathname === "/weight") {
       setActiveTab("weight");
