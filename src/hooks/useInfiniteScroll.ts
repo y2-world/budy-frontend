@@ -10,15 +10,12 @@ export const useInfiniteScroll = (totalLength: number, batchSize = 10) => {
       const windowHeight = window.innerHeight;
       const fullHeight = document.documentElement.scrollHeight;
 
-      if (scrollTop + windowHeight >= fullHeight - 100 && !loadingRef.current) {
+      if (scrollTop + windowHeight >= fullHeight - 300 && !loadingRef.current) {
         loadingRef.current = true;
-        setVisibleCount((prev) => {
-          const next = Math.min(prev + batchSize, totalLength);
-          return next;
-        });
         setTimeout(() => {
+          setVisibleCount((prev) => Math.min(prev + batchSize, totalLength));
           loadingRef.current = false;
-        }, 300);
+        }, 500); // 500ms遅延
       }
     };
     window.addEventListener("scroll", handleScroll);
