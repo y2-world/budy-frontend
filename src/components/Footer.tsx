@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../styles/Footer.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Modal from "./Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +17,16 @@ const Footer: React.FC<FooterProps> = ({ onTabChange }) => {
   const [diary, setDiary] = useState("");
   const [showToast, setShowToast] = useState(false);
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  React.useEffect(() => {
+    if (location.pathname === "/diary") {
+      setActiveTab("diary");
+    } else if (location.pathname === "/weight") {
+      setActiveTab("weight");
+    }
+  }, [location.pathname]);
 
   const getTodayString = () => {
     const today = new Date();
