@@ -7,18 +7,26 @@ import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 type OnboardingModalProps = {
   userEmail: string;
+  height?: string;
+  targetWeight?: string;
+  birthDate?: string;
   onClose: () => void;
 };
 
-function OnboardingModal({ userEmail, onClose }: OnboardingModalProps) {
+function OnboardingModal({
+  userEmail,
+  height: initialHeight,
+  targetWeight: initialWeight,
+  birthDate: initialBirthDate,
+  onClose,
+}: OnboardingModalProps) {
   const [step, setStep] = useState(1);
-  const [height, setHeight] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [weight, setTargetWeight] = useState("");
+  const [height, setHeight] = useState<string>(initialHeight ?? "");
+  const [birthday, setBirthday] = useState<string>(initialBirthDate ?? "");
+  const [weight, setTargetWeight] = useState<string>(initialWeight ?? "");
   const [name, setName] = useState<string>("");
   const [heightError, setHeightError] = useState("");
   const [weightError, setWeightError] = useState("");
-
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => (prev > 1 ? prev - 1 : prev));
 
@@ -112,7 +120,7 @@ function OnboardingModal({ userEmail, onClose }: OnboardingModalProps) {
                   setHeight(value);
                   setHeightError(validateHeight(value));
                 }}
-                placeholder="例：160"
+                placeholder="例：170"
               />
               {heightError && (
                 <div className="error-message">{heightError}</div>
@@ -127,7 +135,7 @@ function OnboardingModal({ userEmail, onClose }: OnboardingModalProps) {
                   setTargetWeight(value);
                   setWeightError(validateWeight(value));
                 }}
-                placeholder="例：50"
+                placeholder="例：60"
               />
               {weightError && (
                 <div className="error-message">{weightError}</div>

@@ -1,6 +1,6 @@
 import Footer from "./Footer";
 import { useState, useEffect } from "react";
-import OnboardingModal from "./OnboardingModal"; // OnboardingModalのインポート
+import OnboardingModal from "./OnboardingModal";
 import UserChart from "./UserChart";
 import "../styles/UserPage.css";
 import "../styles/Modal.css";
@@ -24,13 +24,20 @@ function UserPage() {
     const storedUsers = JSON.parse(localStorage.getItem("users") || "{}");
     const storedRecords = JSON.parse(localStorage.getItem("records") || "{}");
 
+    const defaultGuestUser = {
+      name: "ゲスト",
+      birthDate: "1990-01-01",
+      height: "170",
+      targetWeight: "60",
+      onboarded: false,
+    };
+
     if (!storedEmail) {
-      // ログインしていない場合はゲストユーザーとして扱う
       const guestEmail = "guest@example.com";
       let users = { ...storedUsers };
 
       if (!users[guestEmail]) {
-        users[guestEmail] = { name: "ゲスト" };
+        users[guestEmail] = { ...defaultGuestUser };
         localStorage.setItem("users", JSON.stringify(users));
       }
 
@@ -41,7 +48,7 @@ function UserPage() {
       setUserTargetWeight(guestUser.targetWeight || "");
 
       if (!guestUser.onboarded) {
-        setShowOnboarding(true); // オンボーディングモーダルを表示
+        setShowOnboarding(true);
       }
       return;
     }
@@ -94,6 +101,9 @@ function UserPage() {
     }
   };
 
+  // storedUsersをコンポーネントスコープで取得
+  const storedUsers = JSON.parse(localStorage.getItem("users") || "{}");
+
   return (
     <div className="user-page">
       <div className="card-container">
@@ -145,6 +155,9 @@ function UserPage() {
           <div className="modal-content">
             <OnboardingModal
               userEmail={loggedInUser}
+              birthDate={storedUsers[loggedInUser]?.birthDate ?? ""}
+              height={storedUsers[loggedInUser]?.height ?? ""}
+              targetWeight={storedUsers[loggedInUser]?.targetWeight ?? ""}
               onClose={() => {
                 setShowOnboarding(false);
                 refreshUserData();
