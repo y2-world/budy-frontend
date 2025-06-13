@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "../styles/Modal.css";
 import "../styles/TutorialContent.css";
 import "../styles/Form.css";
+import { validateHeight, validateWeight } from "../utils/validators";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -30,22 +31,6 @@ function OnboardingModal({
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => (prev > 1 ? prev - 1 : prev));
 
-  const validateHeight = (value: string): string => {
-    if (!/^\d+$/.test(value)) return "数値で入力してください。";
-    const num = parseInt(value, 10);
-    if (num < 100 || num > 250)
-      return "身長は100cm〜250cmの範囲で入力してください。";
-    return "";
-  };
-
-  const validateWeight = (value: string): string => {
-    if (!/^\d+$/.test(value)) return "数値で入力してください。";
-    const num = parseInt(value, 10);
-    if (num < 30 || num > 200)
-      return "目標体重は30kg〜200kgの範囲で入力してください。";
-    return "";
-  };
-
   useEffect(() => {
     const users = JSON.parse(localStorage.getItem("users") || "{}");
     if (users[userEmail]) {
@@ -58,11 +43,6 @@ function OnboardingModal({
     const weightValidation = validateWeight(weight);
     setHeightError(heightValidation);
     setWeightError(weightValidation);
-
-    if (!height || !birthday || heightValidation || weightValidation) {
-      alert("すべての項目を正しく入力してください。");
-      return;
-    }
 
     const users = JSON.parse(localStorage.getItem("users") || "{}");
     if (!users[userEmail]) {
